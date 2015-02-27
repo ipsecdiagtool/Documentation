@@ -1,0 +1,111 @@
+\documentclass[a4paper, % A4
+	parskip, % Absätze durch Abstand statt Einrückung gekennzeichnet
+	%draft, % überlange Zeilen werden nicht%markiert
+	USenglish] % english, hyphenation etc.
+	{scrreprt} % Report (KOMA-Script)
+
+\usepackage[T1]{fontenc} % Font family encoding: 8 Bit
+\usepackage[utf8]{inputenc} % Encoding in the created document: UTF-8
+\usepackage{lmodern} % Font family
+\usepackage[babel]{microtype} % Automatische Grauwertverbesserung
+\usepackage[USenglish]{babel} % warning that option english is not loaded yet
+    % when not declaring [USenglish] even though documentclass sets it globally
+\usepackage{IEEEtrantools} % bibliography, quoting (\cite)
+
+\usepackage{graphicx} % include images (\includegrafics)
+\usepackage[section]{placeins} % place floating objects before a \FloatBarrier
+
+\usepackage{framed} % frame paragraphs (\begin{framed})
+\usepackage{geometry} % change margin for title page (\newgeometry,
+	% \resetgeometry)
+\usepackage{setspace} % change line spacing (\onehalfspacing)
+\usepackage{pdflscape} % pages in landscape (\begin{landscape})
+\usepackage{multicol} % multiple columns for a sector (\begin{multicols})
+
+\usepackage{booktabs} % Professional looking tables (\toprule,% \midrule,
+	% \bottomrule)
+\usepackage{threeparttable} % table with notes (\tnote, \begin{tablenotes})
+\usepackage{longtable}
+
+\usepackage[printonlyused, % show only used acronyms
+		% withpage, % show pagenumber of first usage
+	] % longform in footnote (instead of shortform)
+	{acronym} % abbreviations  (\ac, \acs,\acl)
+		% \begin{acronym})
+		
+\usepackage{pdfpages} % include PDFs (\includepdf)
+\usepackage{listings} % codelistings (\lstnewenvironment)
+\usepackage{float} % own floating objects (\newfloat, \floatname)
+
+\usepackage{hyperref} % linking to refs and URLs (\ref, \url, \autoref,
+% \nameref)
+%rename the output for an \autoref{chap:XXX} from lowercase chapter to Chapter
+% and also for Section and Subsection
+\addto\extrasUSenglish{%
+  \renewcommand{\chapterautorefname}{Chapter}% 
+}
+\addto\extrasUSenglish{%
+  \renewcommand{\sectionautorefname}{Section}% 
+}
+\addto\extrasUSenglish{%
+  \renewcommand{\subsectionautorefname}{Subsection}% 
+}
+
+\usepackage{scrhack} % \lstlistoflistings uses deprecated \float@listhead,
+    % scrhack fixes this warning (redefines macros from other packages so they
+    % work better with KOMAscript)
+
+
+% global formatting
+\onehalfspacing % 1.5x line spacing
+
+\usepackage{color}
+
+% colors for syntax highlighting
+\definecolor{strings}{RGB}{42,0,255}
+\definecolor{builtInTypes}{RGB}{127,0,85}
+\definecolor{comments}{RGB}{63,127,95}
+
+\lstdefinestyle{CPPeclipse}{
+    basicstyle=\ttfamily,
+    stringstyle=\color{strings},     
+    keywordstyle=\color{builtInTypes} \bfseries,
+    commentstyle=\color{comments},
+    %emph={int,char,double,float,unsigned},
+    %emphstyle={\color{blue}},
+}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+
+\lstdefinestyle{JavaEclipse}{
+    basicstyle=\ttfamily,
+    commentstyle=\color{pgreen},
+    keywordstyle=\color{pblue},
+    stringstyle=\color{pred},
+}
+
+% Standard Listing
+\lstset{
+	aboveskip=1.5\baselineskip,      % space before listing
+	breakatwhitespace=true,          % break only at whitespace
+	breaklines=true,                 % sets automatic line breaking
+	captionpos=b,                    % sets the caption-position to bottom
+	extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+	frame=single,                    % adds a frame around the code
+	keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+	language=C++,                    % the language of the code, [11] indicates
+	                                 % C++ 11syntax. other possible values:
+	                                 %     ANSI, GNU, VISUAL ISO
+	numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,          % underline spaces within strings only
+	showtabs=false,                  % show tabs within strings adding particular underscores
+	tabsize=3,                       % sets default tabsize in spaces
+	style=CPPeclipse
+}
+% change the name from 'List of Listings' to something else
+% \renewcommand{\lstlistlistingname}{Listingverzeichnis}
