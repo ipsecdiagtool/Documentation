@@ -6,10 +6,19 @@
 
 
 \subsection{UC0: Bestimmen von Paketverlusten}
-Die Paketverluste sollen passiv, durch auslesen der ESP Sequenznummern, ermittelt werden.
+Der Paketverlust soll passiv, durch auslesen der ESP Sequenznummern, vom \tool ermittelt werden.
 
 \subsection{UC1: Bestimmen der optimalen MTU}
-Durch einen Tunnel werden durch Requests unterschiedlicher Grösse die optimale MTU bestimmt die eine möglichst geringe Fragmentierung gewährleistet.
+Durch einen Tunnel werden testweise Pakete unterschiedlicher Grösse gesendet und auf der anderen Seite wieder aufgezeichnet. Dabei wird die ideale MTU ermittelt welche zu einer möglichst tiefen Fragmentierung führt.
 
-\subsection{UC2: Auswahl des Networkdevices}
-Der User ist in der Lage zu bestimmen auf welchem Networkdevice die Überprüfungen stattfinden soll.
+\subsection{UC2: Auswahl des Tunnels}
+Das \tool soll grundsätzliche den Verkehr von allen Tunnels aufzeichnen. Es soll jedoch auch möglich sein anhand eines Konfigurationsfiles nur den Verkehr eines spezifischen Tunnels aufzuzeichnen. Dies wird durch das konfigurieren einer Source- und Destination Adresse erreicht.
+
+\subsection{UC3: Automatische periodische Überprüfungen von Tunnels}
+Tunnels sollen regelmässig und automatisch vom \tool analysiert werden. Das heisst das Detektieren von Paket-Verlust und die Ermittlung der MTU soll stattfinden. Dies kann mittels eines integrierten Daemon oder eines Cron-Jobs realisiert werden.
+
+\subsection{UC4: Auslösen von Alerts bei überschrittenem Grenzwert}
+Wenn ein vorbestimmter Grenzwert beim Überprüfen des Paket-Verlust  überschritten wird soll ein Alert ausgelöst werden. Dieser Alert kann in der Form eines Logfiles sein.
+
+\subsection{Optional UC5: Passiv die IKE Header untersuchen}
+Todo.. tritt nur ein wenn vorige UC's vollständig erfüllt wurden.
