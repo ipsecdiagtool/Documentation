@@ -5,20 +5,20 @@
 \subsection{Aktoren \& Stakeholder}
 
 
-\subsection{UC0: Bestimmen von Paketverlusten}
+\subsection{UC1: Bestimmen von Paketverlusten}
 Der Paketverlust soll passiv, durch auslesen der ESP Sequenznummern, vom \tool ermittelt werden.
 
-\subsection{UC1: Bestimmen der optimalen MTU}
-Durch einen Tunnel werden testweise Pakete unterschiedlicher Grösse gesendet und auf der anderen Seite wieder aufgezeichnet. Dabei wird die ideale MTU ermittelt welche zu einer möglichst tiefen Fragmentierung führt.
-
-\subsection{UC2: Auswahl des Tunnels}
-Das \tool soll grundsätzliche den Verkehr von allen Tunnels aufzeichnen. Es soll jedoch auch möglich sein anhand eines Konfigurationsfiles nur den Verkehr eines spezifischen Tunnels aufzuzeichnen. Dies wird durch das konfigurieren einer Source- und Destination Adresse erreicht.
-
-\subsection{UC3: Automatische periodische Überprüfungen von Tunnels}
-Tunnels sollen regelmässig und automatisch vom \tool analysiert werden. Das heisst das Detektieren von Paket-Verlust und die Ermittlung der MTU soll stattfinden. Dies kann mittels eines integrierten Daemon oder eines Cron-Jobs realisiert werden.
-
-\subsection{UC4: Auslösen von Alerts bei überschrittenem Grenzwert}
+\subsection{UC1.1: Auslösen von Alerts bei überschrittenem Grenzwert}
 Wenn ein vorbestimmter Grenzwert beim Überprüfen des Paket-Verlust  überschritten wird soll ein Alert ausgelöst werden. Dieser Alert kann in der Form eines Logfiles sein.
 
-\subsection{Optional UC5: Passiv die IKE Header untersuchen}
+\subsection{UC2: Bestimmen der optimalen MTU}
+Durch einen Tunnel werden testweise Pakete unterschiedlicher Grösse gesendet und auf der anderen Seite wieder aufgezeichnet. Dabei wird die ideale MTU ermittelt welche zu einer möglichst tiefen Fragmentierung führt.
+
+\subsection{UC2.1: Periodische Bestimmung der idealen MTU}
+Alle Tunnels sollen periodisch, automatisch vom \tool analysiert werden. Dabei wird die ideale MTU wie in UC1 beschrieben bestimmt. Dies kann mittels eines integrierten Daemon oder Cron-Jobs realisiert werden.
+
+\subsection{UC3: Konfiguration}
+Das \tool soll grundsätzliche den Verkehr von allen Tunnels aufzeichnen. Es soll jedoch auch möglich sein anhand eines Konfigurationsfiles nur den Verkehr eines spezifischen Tunnels aufzuzeichnen. Dies wird durch das konfigurieren einer Source- und Destination Adresse erreicht.
+
+\subsection{Optional UC4: Passiv die IKE Header untersuchen}
 Todo.. tritt nur ein wenn vorige UC's vollständig erfüllt wurden.
