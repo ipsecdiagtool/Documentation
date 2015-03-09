@@ -1,4 +1,4 @@
-###Zweites Meeting 13:00 - 27.02.2015 (KW9)  
+###Zweites Meeting 13:00 - 27.02.2015 (KW10)  
 **Teilnehmer:** Andreas Steffen, Tobias Brunner, Stefan Keller (Open Systems), James Hulka (Open Systems), Jan Balmer, Theo Winter
 
 + Herr Steffen hat noch Bedenken bezüglich der Performance von Java. Wir sollen deshalb eine Risiko-Analyse vorziehen und Performance Tests machen. Unser Tool soll in der Lage sein mindestens 20mbit/s an Traffic aufzuzeichnen. Gem. Open Systems kann es zu Peaks von bis zu 300mbit/s kommen, diese sind aber eher selten.
