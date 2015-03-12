@@ -1,15 +1,23 @@
 \section{Use Cases}
 \label{sec:Use Cases}
 
-
 \subsection{Aktoren \& Stakeholder}
-
+\begin{table}[h]
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+\textbf{Aktoren \& Stakeholder} & \textbf{Interessen}                                                                                                                          \\ \hline
+IPSec-Tunnel Administrator      & \begin{tabular}[c]{@{}l@{}}Möchte einen IPSec Tunnel betreiben der einen möglichst\\ geringen Paket-Verlust aufweist.\end{tabular}           \\ \hline
+VPN Benutzer                    & Möchte eine schnelle, stabile Verbindung benutzen.                                                                                           \\ \hline
+System (IPSecDiagTool)          & \begin{tabular}[c]{@{}l@{}}Möchte den Administrator bei Problemen informieren\\ und stets die beste MTU vorschlagen können.\end{tabular} \\ \hline
+\end{tabular}
+\end{table}
 
 \subsection{UC1: Bestimmen von Paketverlusten}
-Der Paketverlust soll passiv, durch auslesen der ESP-Sequenznummern, vom \tool ermittelt werden.
+Der Paketverlust soll passiv, durch auslesen der ESP-Sequenznummern, vom \tool ermittelt werden. Der Paketverlust soll sowohl Prozentual als auch mit einer konkreten Zahl an verlorenen Paketen pro Zeiteinheit ausgewiesen werden. Die Zeiteinheit soll konfigurierbar sein.
 
 \subsection{UC1.1: Auslösen von Alerts bei überschrittenem Grenzwert}
-Wenn ein vorbestimmter Grenzwert beim Überprüfen des Paket-Verlust  überschritten wird soll ein Alert ausgelöst werden. Dieser Alert kann in der Form eines Logfiles sein.
+Wenn ein vorbestimmter Grenzwert beim Überprüfen des Paket-Verlust  überschritten wird soll ein Alert ausgelöst werden. Dieser Alert kann in der Form eines Logfiles sein oder als Nachricht an einen Syslog-Server. Der Grenzwert soll konfigurierbar sein.
 
 \subsection{UC2: Bestimmen der optimalen MTU}
 Durch einen Tunnel werden testweise Pakete unterschiedlicher Grösse gesendet und auf der anderen Seite wieder aufgezeichnet. Dabei wird die ideale MTU ermittelt welche zu einer möglichst tiefen Fragmentierung führt.
@@ -21,4 +29,4 @@ Alle Tunnels sollen periodisch, automatisch vom \tool analysiert werden. Dabei w
 Das \tool soll grundsätzliche den Verkehr von allen Tunnels aufzeichnen. Es soll jedoch auch möglich sein anhand eines Konfigurationsfiles nur den Verkehr eines spezifischen Tunnels aufzuzeichnen. Dies wird durch das konfigurieren einer Source- und Destination Adresse erreicht.
 
 \subsection{Optional UC4: Passiv die IKE Header untersuchen}
-Todo.. tritt nur ein wenn vorige UC's vollständig erfüllt wurden.
+Das \tool bietet die Möglichkeit passiv die IKE Header zu untersuchen und dabei Probleme festzustellen. Dieser Use Case wird nur bearbeitet wenn alle anderen Use Cases erfüllt sind und es müsste dann noch genauer festgelegt werden welche Probleme erkannt werden können.
