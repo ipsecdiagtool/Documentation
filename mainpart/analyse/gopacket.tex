@@ -8,3 +8,9 @@ Im Oktober 2009 wurde die Golang der Öffentlichkeit als Open Source zur Verfüg
 \subsection{Evaluation}
 Unseren ersten Kontakt mit Golang haben wir durch GoProbe von Open Systems gewonnen.
 GoProbe erlaubt leichtgewichtiges aggregieren von Paketen und deren effiziente Speicherung. Eine Abfrage der gespeicherten Paketen ist via Querying Flows möglich.
+
+Die Installation von Golang und das Builden von goProbe waren etwas harzig. Es hat aber schlussendlich geklappt. Die Erkenntnisse wie man goProbe erfolgreich installieren kann sind im Anhang dokumentiert.
+
+GoProbe besteht aus drei Modulen. Zum einen ein Modul das selbst goProbe heisst und zum aufzeichnen von Paketen verwendet wird. Die von goProbe aufgezeichneten Pakete werden dann mit goDB gespeichert. GoDB ist eine speziell für Netzwerk-Pakete entwickelte Datenbank. Die gespeicherten Pakete können dann mit goQuery wieder abgefragt werden. Ausserdem steht noch ein optionales Modul namens goConvert zur Verfügung. Die drei Module sind aber ein vollständiges Programm und nicht Bibliotheken die wir einfach so in unser \tool einbinden können. Das von uns entwickelte \tool würde GoProbe als Vorbild nehmen aber wahrscheinlich keine Dependencies darauf haben. In der momentanen Evaluierungs-Phase ist es aber ein gutes Versuchsobjekt für die Performance-Tests.
+
+Golang selbst hat einige sehr angenehme Eigenschaften, so lässt sich der Code z.B. sehr einfach mit dem mitgelieferten godoc dokumentieren. Auch das Installieren von Dependencies via. 'go get package-name' ist sehr hilfreich, vorausgesetzt man hat die GOPATH-Umgebungsvariablen korrekt gesetzt.
