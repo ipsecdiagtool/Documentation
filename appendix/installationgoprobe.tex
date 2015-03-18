@@ -1,0 +1,37 @@
+\chapter{Installation goProbe}
+Einleitung todo
+
+\section{Installation}
+\subsection{Installation}
+Wenn man dem README von goProbe glauben darf ist die Installation ganz einfach. Einmal "sudo su" gefolgt von "make all" ausführen und schon ist es installiert. In der Realität klappt das leider nicht sofort.
+Nach einigem debuggen des Make Skripts sind wir auf folgenden Workaround gestossen.
+
+%Dependencies:
+%- bison
+%- build-essential
+%- flex
+%- curl
+
+%todo bash syntax highlighting
+%sudo su
+
+%cd ../goProbe/
+%make all
+
+%cd ../goProbe/libpcap-1.5.3
+%make clean
+%make install
+
+%cd ../goProbe/
+%make all
+
+%cd ../~/
+%vim .bashrc
+%
+%#Jump to lastline
+%#Insert:
+%export LD_LIBRARY_PATH=/usr/local/goProbe/lib
+
+%todo END bash syntax highlighting
+
+Jetzt funktioniert 
