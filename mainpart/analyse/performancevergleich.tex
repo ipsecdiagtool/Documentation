@@ -15,11 +15,11 @@ Java und Golang sind von den Ergebnissen her recht ähnlich. Beide haben die Anf
 Beim Memory siehts bei goProbe klar besser aus weil es den ganzen \acs{JVM} Overhead nicht hat.
 
 \begin{table}[h]
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
 \rowcolor[HTML]{C0C0C0} 
-\textbf{Software} & \textbf{CPU Spitze} & \textbf{CPU Ø} & \textbf{Memory Ø} \\ \hline
-JNetPcap auf Java & 31\%                & 20\%           & tbd               \\ \hline
-goProbe auf Go    & 18\%                & 17\%           & tbd               \\ \hline
+\textbf{Software} & \textbf{CPU Top} & \textbf{CPU Ø} & \textbf{Mem Ø} & \textbf{VIRT} & \textbf{RES} & \textbf{SHR} \\ \hline
+JNetPcap          & 31\%             & 20\%           & 0.9\%          & 7030296       & 147840       & 19588        \\ \hline
+goProbe           & 18\%             & 16\%           & 0.3\%          & 315268        & 1964         & 1676         \\ \hline
 \end{tabular}
 \end{table}
