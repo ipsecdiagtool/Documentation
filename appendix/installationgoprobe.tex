@@ -1,0 +1,54 @@
+\chapter{goProbe}
+GoProbe erlaubt leichtgewichtiges aggregieren von Paketen und deren effiziente Speicherung. Eine Abfrage der gespeicherten Paketen ist via Querying Flows möglich.
+Da die Installation von goProbe mit dem zur Verfügung gestellten MAKE-file nicht ganz fehlerfrei abläuft gibt es diese Installations-Anleitung.
+
+\section{Systemvoraussetzungen}
+Diese Anleitung bezieht sich auf Ubuntu 14.04 x64. Für andere System sollte man sich auf die offizielle Installationsanleitung im GitHub-Repository von goProbe verlassen.
+
+\section{Installation}
+Zuerst müssen die fehlenden Dependencies installiert werden. Unter anderem "build-essential, flex, curl und bison".
+
+\begin{lstlisting}[language=bash]
+  $ sudo apt-get install build-essential bison flex curl
+\end{lstlisting}
+
+Danach clonen wir das GitHub-Repository.
+
+\begin{lstlisting}[language=bash]
+  $ git clone https://github.com/open-ch/goProbe.git
+\end{lstlisting}
+
+Nun wechseln wir in das goProbe Verzeichnis, erlangen root-Rechte und führen das MAKE-File mit dem Parameter "all" aus.
+
+\begin{lstlisting}[language=bash]
+  $ cd ../git/goProbe
+  $ sudo su
+  $ make all
+\end{lstlisting}
+
+Das Make File lädt automatisch die noch fehlenden Dependencies herunter und versucht goProbe zu builden. Wenn der Kompilier-Vorgang fertig läuft dann wurde goProbe erfolgreich installiert. Bei uns hat dass jedoch nicht geklappt, wir mussten hier ins libpcap-Verzeichnis wechseln und dieses zuerst einzeln builden und installieren.
+
+\begin{lstlisting}[language=bash]
+  $ cd libpcap-1.5.3
+  $ make clean
+  $ make install
+\end{lstlisting}
+
+Nun können wir zurück ins Hauptverzeichnis wechseln und goProber erneut builden.
+
+\begin{lstlisting}[language=bash]
+  $ cd ..
+  $ make all
+\end{lstlisting}
+
+Der Build-Vorgang zeigt nun zwar einige Build-Warnings sollte aber vollständig durchlaufen. Als letzten Schritt müssen wir jetzt nur noch das Bibliotheken-Verzeichnis "/usr/local/goProbe/lib" korrekt verlinken.
+
+\begin{lstlisting}[language=bash]
+  $ cd ~
+  $ vim .bashrc
+  
+  #Am Ende des Files einfuegen:
+  export LD_LIBRARY_PATH=/usr/local/goProbe/lib
+\end{lstlisting}
+
+Nun kann ein neues Terminal geöffnet werden und der Befehl 'goProbe' sollte ohne Errors ausgeführt werden können.

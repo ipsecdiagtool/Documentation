@@ -20,7 +20,7 @@ Der Paketverlust soll passiv, durch auslesen der ESP-Sequenznummern, vom \tool e
 Wenn ein vorbestimmter Grenzwert beim Überprüfen des Paket-Verlust  überschritten wird soll ein Alert ausgelöst werden. Dieser Alert kann in der Form eines Logfiles sein oder als Nachricht an einen Syslog-Server. Der Grenzwert soll konfigurierbar sein.
 
 \subsection{UC2: Bestimmen der optimalen MTU}
-Durch einen Tunnel werden testweise Pakete unterschiedlicher Grösse gesendet und auf der anderen Seite wieder aufgezeichnet. Dabei wird die ideale MTU ermittelt welche zu einer möglichst tiefen Fragmentierung führt.
+Durch einen Tunnel werden testweise Pakete unterschiedlicher Grösse gesendet und auf der anderen Seite wieder aufgezeichnet. Dabei wird die ideale MTU ermittelt welche zu keiner Fragmentierung führt.
 
 \subsection{UC2.1: Periodische Bestimmung der idealen MTU}
 Alle Tunnels sollen periodisch, automatisch vom \tool analysiert werden. Dabei wird die ideale MTU wie in UC1 beschrieben bestimmt. Dies kann mittels eines integrierten Daemon oder Cron-Jobs realisiert werden.

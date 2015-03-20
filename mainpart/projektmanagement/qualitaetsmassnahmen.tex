@@ -9,12 +9,50 @@ Für dieses Projekt wurde eine Organisations "IPSecDiagTool" auf Github.com erst
 Im vierten Repository befindet sich diese Dokumentation als LaTex Source-Dateien. Auch in dieses Repository wird nur Dokumentations-Code eingepflegt der kompiliert und durch eine verständliche Commit-Nachricht dokumentiert ist.
 
 \subsection{Dokumentation}
-Die Dokumentation wird während der Arbeit geschrieben und nicht in eine separaten Phase am Ende. So wird sichergestellt das wirklich unser gesamtes KnowHow erhalten bleibt.
+Die Dokumentation wird während der Arbeit geschrieben und nicht in eine separaten Phase am Ende. So wird sichergestellt das unser gesamtes KnowHow erhalten bleibt.
 Es werden regelmässige Dokumentations-Reviews geplant um die Qualität der Dokumentation sicher zu stellen.
 
+Ausserdem werden wir den Code-Dokumentation-Richtlinien von Google zur Verwendung mit Golang folgen. Dies hat den Vorteil dass via godoc zu jeder Zeit, automatisiert eine komplette Dokumentation des Codes erzeugt werden kann. Zudem ist die Dokumentation im Code integriert so dass auch beim direkten lesen des Codes unsere Gedanken-Vorgänge anschaulich sind.
+
+%TODO: Beispiel später mit besserem Code ersetzen.
+\begin{lstlisting}[language=go]
+//LiveCapture captures all tcp & port 80 packets on eth0.
+func LiveCapture() {
+	if handle, err := pcap.OpenLive("eth0", 1600, true, 0); err != nil {
+		panic(err)
+	} else if err := handle.SetBPFFilter("tcp and port 80"); err != nil {
+		panic(err)
+	} else {
+		packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
+		for packet := range packetSource.Packets() {
+			//Handling packets here
+			fmt.Println(packet.Dump())
+		}
+	}
+}
+\end{lstlisting}
+
+%TODO: Screenshot von godoc erstellen und einfügen.
+
 \subsection{Code Richtlinien}
-Da die Programmiersprache noch nicht feststeht haben wir uns noch auf keine spezifischen Richtlinien festgelegt. Dieser Teil wird später noch angepasst. TODO
-Grundsätzlich soll der Code gut lesbar sein, mit sauberen und aussagekräftigen Variablen-, Methoden-, und Klassennamen. Alle Kommentare im Code sollen sind auf Englisch zu verfassen.
+Grundsätzlich soll der Code gut lesbar sein, mit sauberen und aussagekräftigen Variablen-, Methoden-, und Klassennamen. Alle Kommentare im Code sind auf Englisch zu verfassen und sollen gem. den Google Dokumentation-Richtlinien erstellt werden (siehe oben).
+Änderungen am Code sollen regelmässig in unser Repository auf GitHub committed werden so dass man sie besser nachvollziehen kann.
+
+Da Golang für uns eine neue Sprache ist und wir uns zum Zeitpunkt dieser Textstelle damit noch nicht gut auskennen gelten überall wo möglich die von Google Inc. verwendeten Code-Richtlinien.
+
+%TODO: Code-Richtlinien eventuell noch erweitern.
 
 \subsection{Tests}
-Tests sind abhängig von der gewählten Programmiersprache. TODO
+Zu jeder erstellten Funktion sollen passenden Unit-Tests geschrieben werden um alle wichtigen Verhaltensweisen zu überprüfen. Die Unit-Tests werden gem. den Golang Vorlagen im selben Ordner wie der zu-testende Code gespeichert. Und zwar nach dem nachfolgenden Schema.
+
+\begin{lstlisting}[language=bash]
+bin/
+pkg/
+src/
+    hsr.ipsecdiagtool/
+		main/
+	    		main.go               # command source
+		capture/
+	    		capture.go                # command source
+	    		capture_test.go           # test source
+\end{lstlisting}
