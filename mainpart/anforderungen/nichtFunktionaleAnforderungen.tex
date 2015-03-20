@@ -1,4 +1,41 @@
 \section{Nichtfunktionale Anforderungen}
 \label{sec:Nichtfunktionale Anforderungen}
 
-todo
+\subsection{Angemessenheit}
+\begin{itemize}
+	\item Die Applikation soll schlank und übersichtlich und in einem einheitlichen Stiel programmiert werden.
+	\item Es sollen möglichst alle der genannten Anforderungen erfüllt werden.
+\end{itemize}
+
+\subsubsection{Funktionalität}
+\begin{itemize}
+\item Das Zeitfenster der überwachung von Paketverlusten ist konfigurierbar.
+\item Das Diagnose Tool funktioniert mindestends bis zu einer Datenrate von 300Mbit/s.
+\item Für die Überprüfung der MTU fungiert eine Seite als Client und die andere als Server, wobei die gleiche Software verwendet werden kann.
+\item Es ist konfigurierbar welches Netzwerkinterface bei der überwachung verwendet werden soll.
+\end{itemize}
+
+\subsubsection{Testbarkeit}
+\begin{itemize}
+\item Businesslogik muss über alle Use Cases (Normal verhalten) mit automatischen Unit Test abgedeckt sein.
+\end{itemize}
+
+\subsubsection{Fehlertoleranz}
+\begin{itemize}
+\item Installation des Tools kann automatisch überprüft werden.
+\item Das System muss nach einem Neustart in einem definierten Zustand sein.
+\item Es wird vor dem Start überprüft ob die eingestellte Konfiguration gültig ist.
+\end{itemize}
+
+\subsubsection{Änderbarkeit}
+\begin{itemize}
+\item Daten und Reports werden in einem Standard gespeichert, welcher auch von anderen Systemen gelesen werden kann (CSV, XML)
+\item Der Code inklusive Kommentar sind auf englisch um eine leichtere Anpassbarkeit zu erreichen.
+\end{itemize}
+
+\subsubsection{Anforderungen an Umgebung}
+\begin{itemize}
+\item Das Tool ist unter dem Betriebssystem Linux lauffähig, es werden jedoch root rechte benötigt.
+\item Für die Umgebung braucht es die Pcap library sowie die Go Programming Language.
+\item Das Tool soll Open-Source sein und der Quellcode daher für jeden zugänglich.
+\end{itemize}
