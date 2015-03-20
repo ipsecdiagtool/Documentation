@@ -14,7 +14,7 @@ Via. jPerf wird nun soviel Traffic erzeugt um die 1Gbit/s-Leitung möglichst sta
 
 \subsection{Ergebnisse}
 Sowohl mit JNetPcap auf Java als auch mit goProbe auf Golang lassen sich mehr als 300mbit/s an Verkehr aufzeichnen. GoProbe ist mit den Durchschnittlich 16\% CPU Auslastung aber etwas performanter als JNetPcap. Die 31\% CPU Lastspitze beim Java Programm gibt es jeweils nur wenn das Programm zum ersten Mal gestartet wird und kommt daher dass dann zuerst eine \acs{JVM} hochgefahren werden muss.
-Beim Speicherverbrauch hat goProbe aber deutlich die Nase vorne. So wird tatsächlich nur ein Bruchteil des physischen Speichers (RES) gegenüber Java gebraucht.
+Beim Speicherverbrauch hat goProbe aber deutlich die Nase vorne. So wird tatsächlich nur ein Bruchteil des physischen Speichers (RES) gegenüber Java verwendet.
 
 %TODO: RES evtl. noch verlinken.
 
