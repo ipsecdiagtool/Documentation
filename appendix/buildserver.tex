@@ -17,6 +17,25 @@ Wir haben Jenkins auf dem HSR VPS mit einem Ubuntu 14.04 x64 betrieben. Dabei wu
 TODO: https://bitbucket.org/korfuri/golang-latex-listings/src/6334c5cbf471/lstlang0.sty
 korrekt attributieren.
 
+\section{GitHub - WebHook Konfiguration}
+Um bei jedem Commit direkt einen Build Vorgang auszulösen haben wir bei GitHub für jedes Projekt einen WebHook definiert. Beim Documentation Repository wurden die folgenden Einstellungen gewählt:
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+{\color[HTML]{000000} \textbf{Option}} & {\color[HTML]{000000} \textbf{Einstellung}}                                                                                          \\ \hline
+Payload URL                            & \begin{tabular}[c]{@{}l@{}}http://username:password@152.96.56.53:40000/job/IPSecDiagTool\\ \%20-\%20Documentation/build\end{tabular} \\ \hline
+Content type                           & application/x-www-form-urlencoded                                                                                                    \\ \hline
+Secret                                 &                                                                                                                                      \\ \hline
+Trigger                                & Just the push event.                                                                                                                 \\ \hline
+Active                                 & true                                                                                                                                 \\ \hline
+\end{tabular}
+\end{table}
+
+Die Einstellungen beim IPSecDiagTool Repository sind analog.
+
 \section{IPSecDiagTool - Go Build Job}
 
 \subsection{Job Einstellungen}
