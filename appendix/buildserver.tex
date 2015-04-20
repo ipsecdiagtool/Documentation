@@ -1,0 +1,98 @@
+\chapter{Jenkins Buildserver}
+Um repetitive Aufgaben möglichst zu vermindern haben wir Jenkins als \acs{CI} Server eingesetzt. Wir haben Jenkins so konfiguriert dass für jeden Commit, sowohl beim Programm als auch bei der LaTeX-Dokumentation, ein neuer Build-Job gestartet wird.
+In diesem Kapitel werden die konkreten Konfigurationen dokumentiert.
+
+\section{Systemvoraussetzungen}
+Wir haben Jenkins auf dem HSR VPS mit einem Ubuntu 14.04 x64 betrieben. Dabei wurden folgende Abhängigkeiten vorinstalliert:
+
+\begin{itemize}
+  \item Jenkins 1.610
+  \item libpcap0.8-dev
+  \item go 1.4.2
+  \item git 2.3.5
+  \item texlive-full 2015
+  \item golang lstlang0.sty
+\end{itemize}
+
+TODO: https://bitbucket.org/korfuri/golang-latex-listings/src/6334c5cbf471/lstlang0.sty
+korrekt attributieren.
+
+\section{IPSecDiagTool - Go Build Job}
+
+\subsection{Job Einstellungen}
+Die folgenden Einstellungen wurden beim Go Build Job verwendet:
+
+\begin{table}[h]
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+{\color[HTML]{000000} \textbf{Option}} & {\color[HTML]{000000} \textbf{Einstellung}}              \\ \hline
+Discard Old Builds                          & Yes                                                      \\ \hline
+Log Rotation                                & Max \# of builds to keep 5                               \\ \hline
+SCM                                         & None                                                     \\ \hline
+Build Trigger                               & None                                                     \\ \hline
+Archive the artifcats                       & src/github.com/ipsecdiagtool/ipsecdiagtool/ipsecdiagtool \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Bash Script}
+\begin{lstlisting}[language=bash]
+#!/bin/sh
+echo "Cleaning workspace"
+if [ -d src ]; then
+	rm -r *
+fi
+
+export GOROOT=/usr/local/go
+export GOPATH="$WORKSPACE"
+export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
+
+echo "Downloading dependencies"
+#sudo apt-get install libpcap-0.8-dev
+go get code.google.com/p/gopacket
+go get code.google.com/p/gopacket/pcap
+go get golang.org/x/net/ipv4
+
+echo "Moving to program directory"
+cd src
+mkdir -p github.com/ipsecdiagtool/
+cd github.com/ipsecdiagtool
+git clone https://github.com/IPSecDiagTool/IPSecDiagTool.git
+mv IPSecDiagTool ipsecdiagtool
+cd ipsecdiagtool
+
+echo "Building program"
+go version
+go build
+\end{lstlisting}
+
+
+
+\section{Dokumentation - LaTex Build Job}
+
+\subsection{Job Einstellungen}
+Die folgenden Einstellungen wurden beim LaTeX Build Job verwendet:
+
+\begin{table}[h]
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor[HTML]{C0C0C0} 
+{\color[HTML]{000000} \textbf{Option}} & {\color[HTML]{000000} \textbf{Einstellung}}                                                                                           \\ \hline
+Discard Old Builds                          & Yes                                                                                                                                   \\ \hline
+Log Rotation                                & Max \# of builds to keep 5                                                                                                            \\ \hline
+SCM                                         & \begin{tabular}[c]{@{}l@{}}Git\\     URL:      https://github.com/IPSecDiagTool/Documentation.git\\     Branch: */master\end{tabular} \\ \hline
+Build Trigger                               & None                                                                                                                                  \\ \hline
+Archive the artifcats                       & IPSecDiagTool.pdf                                                                                                                     \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Bash Script}
+\begin{lstlisting}[language=bash]
+#!/bin/sh
+pdflatex index.tex > /dev/null 2>&1
+bibtex index.aux > /dev/null 2>&1
+pdflatex index.tex > /dev/null 2>&1
+pdflatex index.tex
+
+mv -f index.pdf IPSecDiagTool.pdf
+\end{lstlisting}
