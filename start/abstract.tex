@@ -5,4 +5,14 @@
 
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
 
-todo
+\section{Ausgangslage}
+Die Firma \osag betreibt im Auftrag ihrer Kunden rund um die Uhr ein weltweites Netz von \acs{IPSec} \acs{VPN} Tunnels. Dabei steht eine hohe Qualität und Verfügbarkeit dieser Tunnels an erster Stelle. Die \osag betreibt deshalb ein Mission Control Center welches die \acs{VPN} Verbindungen jederzeit überwacht. Doch nicht alle Eigenschaften dieser Verbindungen lassen sich auf einfache Art kontrollieren. So wurden zum Beispiel Paket-Verluste bisher nur periodisch überprüft. Auch eine Überprüfung der konfigurierten \acs{MTU} fand bisher nur bei Problemfällen statt. Das vorliegende \tool soll eine Möglichkeit bieten die Überwachung der \acs{IPSec} Tunnels durch eine konsequente Überprüfung von Paket-Verlusten und einer periodischen Detektion der \acs{MTU} zu vereinfachen.
+
+\section{Technologie}
+Das \tool ist als Kommandozeilen Applikation realisiert welches 24/7 auf den Routern der \osag betrieben wird. Um einen möglichst kleinen Memory-Footprint zu hinterlassen und eine gute Performance zu bieten wurde entschieden Go als Programmiersprache einzusetzen. Als \acs{PCAP} Library wird libpcap mit dem von Google entwickelten "gopacket"-Wrapper eingesetzt. Um das \tool zu konfigurieren wird jeweils ein JSON-Konfigurationsfile erstellt. Um zum Beispiel bei hohem Paket-Verlust eine Meldung abzusetzen wird Syslog verwendet.
+
+\section{Ergebnis}
+Als Ergebnis liegt eine leichtgewichtige, konfigurierbare und einfach zu bedienende Kommandozeilen Applikation vor. Die Applikation führt selbständig durch dass passive Abfangen von Paketen eine Paket-Verlust Kontrolle durch und meldet dann potentielle Probleme. Ausserdem wird via Cronjob, periodisch eine \acs{MTU}-Bestimmung getriggert, die parallel für alle Konfigurierten Tunnels die \acs{MTU} meldet.
+
+\section{Ausblick}
+Die vorliegende Applikation ist so aufgebaut dass Teile davon auch als Library verwendet werden können. Da wir das \tool unter einer Open Source Lizenz veröffentlicht haben ist es denkbar dass Teile davon in anderen Go-Applikationen integriert werden. Oder aber das \tool selbst wird durch weitere Diagnose-Möglichkeiten erweitert.
