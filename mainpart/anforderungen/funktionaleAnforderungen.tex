@@ -1,4 +1,25 @@
 \section{Funktionale Anforderungen}
 \label{sec:Funktionale Anforderungen}
 
-todo
+\todo{Detaillierte Beschreibung der Kriterien mit fliesstext..}
+
+\subsection{Muss-Kriterien}
+\begin{itemize}
+  \item M0: Paket-Verlust messen
+  \item M1: MTU bestimmen
+  \item M2: Log-Nachrichten schreiben
+  \item M3: Programm ist konfigurieren
+\end{itemize}
+
+\subsection{Soll-Kriterien}
+\begin{itemize}
+  \item S0: Unterstützung von mehreren Tunnels
+  \item S1: Applikation läuft permanent als Daemon/Service
+  \item S2: Konfiguration ist Machinen und Menschen lesbar
+\end{itemize}
+
+\subsection{Kann-Kriterien}
+\begin{itemize}
+  \item K0: Die Applikation liest die benötigte Konfiguration aus vorhandenen Konfigurationsfile für die \acs{IPSec} Tunnels aus.
+  \item K1: Es können direkt aus dem \tool Statistiken gezogen werden.
+\end{itemize}
