@@ -2,6 +2,8 @@
 
 #Result
 index.pdf
+index_sa.pdf
+index_ba.pdf
 
 # TeX, snapshot, and latexmk generated files
 *.aux
