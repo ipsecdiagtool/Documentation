@@ -2,22 +2,24 @@
 \label{sec:MTU Discovery}
 
 \subsection{Einleitung}
-Mithilfe der \acs{MTU} (Maximum Transmission Unit) wird festgelegt wie gross ein Netzwerkpaket maximal sein darf bevor es in mehrere Pakete aufgeteilt werden muss. Das finden der MTU läuft normalerweise via \acs{PMTUD} (Path MTU Discovery) ab, dabei werden \acs{ICMP} Pakete unterschiedlicher Grösse über die Verbindung gesandt und so festgestellt welches die maximale Grösse ist die noch ankommt. Das Problem dabei ist jedoch das ICMP Pakete in manchen Fällen von zu scharf konfigurierten Firewalls blockiert werden. Das heisst es kann vorkommen dass die MTU einer Verbindung nicht richtig konfiguriert ist und so kann man die Leitung nicht richtig ausnutzen. Um dieses Problem zu lösen haben wir eine \acs{MTU} Discovery Funktion im \tool entwickelt. Die Funktion verwendet ein ähnliches Vorgehen wie \acs{PMTUD}, verlässt sich dabei aber nicht auf \acs{ICMP} Pakete.
-Das \tool läuft auf beiden Seiten eines \acs{IPSec} Tunnels und überwacht jeweils passiv die Verbindung. Zu in der Konfiguration festgelegten Zeitpunkten versucht jeweils eine Seite die \acs{MTU} zu ermitteln. Dabei werden laufend grössere Pakete übertragen bei denen ein "Do not fragment"-Flag gesetzt wurde. %TODO: flag verdeutschen?
-So lange die Pakete auf der anderen Seite ankommen wird eine Antwort zurück gesendet. Falls keine Antwort zurück kommt weiss der Sender dass die Paketgrösse zu gross war und versucht das erneute versenden mit einer kleineren Paketgrösse.
-Am Schluss wird die erfolgreich festgestellte \acs{MTU} protokolliert und die Timer beider Seiten wieder hochgestellt.
+Mithilfe der \acs{MTU} (Maximum Transmission Unit) wird festgelegt wie gross ein Netzwerkpaket maximal sein darf bevor es in mehrere Pakete aufgeteilt werden muss. Wenn die \acs{MTU} korrekt bestimmt wurde dann kann IP-Paket-Fragmentierung verhindert werden und die Performance der Netzwerkverbindung ist deutlich besser. In einem Netzwerk wird die \acs{MTU} typischerweise pro Netzwerk-Adapter festgelegt. Bei  \acs{IPSec} \acs{VPN} Tunnels kann die \acs{MTU} hingegen pro Tunnel definiert werden auch wenn mehrere Tunnels über den selben Netzwerk-Adapter laufen.
+Typischerweise wird die MTU via \acs{PMTUD} (Path MTU Discovery) ermittelt, dabei werden \acs{ICMP} Pakete unterschiedlicher Grösse über die Verbindung gesandt und so kann festgestellt werden welches die maximale Grösse ist die noch ankommt.
+Bei \acs{PMTUD} gibt es jedoch ein bedeutendes Problem. Viele Netzwerk-Sicherheits Geräte blockieren ICMP Pakete und so kann die \acs{MTU} der Verbindung nicht korrekt ermittelt werden.
+Um die Probleme von \acs{PMTUD} zu umgehen und eine korrekte \acs{MTU} ermitteln zu können haben wir die MTU-Komponente des \tool entwickelt, deren Funktionsweise in den nachfolgenden Abschnitten erläutert wird.
 
-%TODO: statt Alice und 2 Alice und Bob verwenden!
-\subsection{MTU-Bestimmung: Erfolgreich}
-Dieses Sequenz-Diagramm stellt den idealen Ablauf bei der MTU-Bestimmung dar. Alice schickt Bob ein Paket mit dem Kommando 'MTU?'. Dieses Paket hat eine typische Grösse gem. Erfahrungswerten. Momentan starten wir mit 500Bytes. %TODO: CITATION NEEDED! GRÖSSE ANPASSEN
-Bob erhält das Paket und schickt eine Antwort mit dem Kommando 'OK'. Darauf erhöht Alice
-die Grösse des Pakets um einen konfigurierbaren Inkrementationswert und schickt es wieder zurück an
-Bob. Dieser Ablauf wird so lange wiederholt bis das Paket nicht mehr bei Bob ankommt.
-Weil das Paket nicht ankommt kann Bob keine Antwort senden und Alice läuft in ein Timeout.
-Alice nimmt jetzt den letzten erfolgreichen MTU-Wert und schickt Bob erneut ein Paket.
-Wenn das Paket erfolgreich ankommt, d.h. Bob ein 'OK' zurückschickt wurde die MTU erfolgreich gefunden. Alice setzt nun einen Meldung ab das die ideal MTU für die Verbindung zwischen Alice und 2 gefunden wurde.
+%http://en.wikipedia.org/wiki/Path_MTU_Discovery
+\todo{Citation needed}
 
-%TODO: Grafik an aktuellen Algorithmus anpassen.
+\subsection{Path MTU Discovery}
+Die Path MTU Discovery \acs{PMTUD} ist eine standardisierte Technik um die \acs{MTU} festzustellen.  Bei \acs{IPv4} funktioniert \acs{PMTUD} folgendermassen: Es werden \acs{ICMP} Pakete unterschiedlicher Grösse über die Netzwerkverbindung gesendet. Geräte deren \acs{MTU} kleiner als die Grösse des versendeten Pakets ist verwerfen das Paket und senden stattdessen eine \acs{ICMP} Nachricht mit dem Inhalt "Fragmentation Needed" zurück. So weiss der \acs{PMTUD} Algorithmus dass die versendeten Pakete noch zu gross sind um ihr Ziel zu erreichen. Die versendeten Pakete werden also verkleinert, und der Prozess wiederholt, bis eine Übertragungsgrösse gefunden wird mit der ein Paket den ganzen Pfad ohne Fragmentierung traversieren kann.
+
+Doch wie bereits in der Einleitung angesprochen gibt es bei \acs{PMTUD} ein Problem. Viele Netzwerk-Sicherheit Geräte blockieren \acs{ICMP} Nachrichten. Dies beinhaltet die Errors "Fragmentation Needed" des \acs{PMTUD} Algorithmus. 
+
+%http://en.wikipedia.org/wiki/Path_MTU_Discovery
+\todo{Citation needed}
+
+\subsection{MTU-Bestimmung - Idee}
+Um die \acs{MTU} der Verbindung zwischen Alice und Bob fest zu stellen werden Pakete mit einer 
 
 % GFX Trim left bottom right top
 \includegraphics[trim=10 10 200 10,clip,width=\textwidth]{mainpart/implementation/img/MTUBestimmungErfolgreich}
