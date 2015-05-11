@@ -1,4 +1,76 @@
 \chapter{Usermanual}
 \label{chap:Usermanual}
-TODO: Usermanual ist in Englisch gem. Sitzung 2.
-This chapter explains how to use our \tool. 
+The \tool is a diagnosis application for the continuous monitoring of \acs{IPSec} \acs{VPN} tunnels. It has two main features. Firstly it's capable of passively detecting packet loss occurring within the \acs{IPSec} tunnels. If the packet loss exceeds a specified threshold a Syslog warning is automatically dispatched. Secondly IPSecDiagTool can actively determine the exact \acs{MTU} within a tunnel. This is useful when you're dealing with badly configured routers that block regular \acs{ICMP} messages outside of the tunnel. The \tool is designed to run as a daemon/service, but for testing purposes it also has a interactive mode.
+
+\section{Installation Guide}
+This chapter explains how to install the \tool.
+
+\subsection{System Requirements}
+The \tool is currently set up to run on Linux based systems and it requires a installation of the libpcap0.8-dev package. 
+
+\todo{CPU and RAM performance impact requirements}
+
+\section{Installation}
+To install the \tool you need to run the following bash script. It will take care of setting up a tempoary go-environment and getting the proper dependencies. You can also get the latest version of the build-script from the Github-Repository (\url{https://github.com/ipsecdiagtool/ipsecdiagtool/blob/master/build.sh}).
+
+\lstset{language=bash, breaklines=true}
+\begin{lstlisting}
+#!/usr/bin/env bash
+# Title:  build.sh                                       
+# URL:    https://github.com/IPSecDiagTool/IPSecDiagTool
+# Author: Jan Balmer, Theo Winter
+#    
+# This script can be used to build IPSecDiagTool in a
+# Linux environment. Tested on Ubuntu 14.04.1 LTS.
+#
+# Dependencies:
+#  - libpcap0.8-dev
+
+echo "Cleaning workspace"
+if [ -d go ]; then
+	rm -rf go1.4.2.linux-amd64.tar.gz
+	rm -rf go
+    rm -rf workspace
+fi
+
+echo "Debug Infos"
+go version
+go env
+
+echo "Setting up Go"
+wget https://storage.googleapis.com/golang
+/go1.4.2.linux-amd64.tar.gz
+tar xf go1.4.2.linux-amd64.tar.gz
+mkdir workspace
+
+export GOROOT=$(pwd)/go
+export GOPATH=$(pwd)/workspace
+export PATH="$PATH:$GOROOT/bin:$GOPATH/bin"
+
+cd workspace
+
+#Can be deactivated if libpcap is already installed.
+echo "Downloading dependencies"
+sudo apt-get install libpcap0.8-dev
+
+echo "Getting and building ipsecdiagtool"
+go get github.com/ipsecdiagtool/ipsecdiagtool
+\end{lstlisting}
+
+\todo{Make sure to update or use direct code-link !!}
+
+\section{Usage}
+
+\subsection{Commands}
+The following commands can be used to control the \tool.
+
+\begin{tabularx}{\textwidth}{l|l|>{\raggedright\arraybackslash}X} 
+\textbf{Command} & \textbf{Alternative} & \textbf{Explanation} \\
+\hline
+install &  & Install the \tool as a daemon.\\
+uninstall & remove & Removes the \tool daemon.\\
+interactive & demo & Allows for interactive testing. Results are directly printed to the console. The daemon is not used. \\
+mtu-discovery & mtu & Tells the daemon to start finding the MTU for all configured tunnels. \\
+about & version & Displays general information about the \tool. \\
+help & & A list of commands and how to use them.
+\end{tabularx}

@@ -12,6 +12,11 @@
     % when not declaring [USenglish] even though documentclass sets it globally
 \usepackage{IEEEtrantools} % bibliography, quoting (\cite)
 
+% Better tables
+\usepackage{tabularx}
+\newcolumntype{b}{X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+
 \usepackage{graphicx} % include images (\includegrafics)
 \usepackage[section]{placeins} % place floating objects before a \FloatBarrier
 
