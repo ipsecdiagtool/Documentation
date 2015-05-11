@@ -6,9 +6,13 @@ The \tool is a diagnosis application for the continuous monitoring of \acs{IPSec
 This chapter explains how to install the \tool.
 
 \subsection{System Requirements}
-The \tool is currently set up to run on Linux based systems and it requires a installation of the libpcap0.8-dev package. 
+The \tool is currently set up to run on Linux based systems and it requires a installation of the libpcap0.8-dev package. Depending on your local settings you may need to run the \tool as superuser (sudo) to be able to capture packets.
 
-\todo{CPU and RAM performance impact requirements}
+Although the \tool has only been tested on Linux based systems you may be able to get it running on OS X or windows without or with very few changes to its source code. The application was designed with a broad compatibility in mind.
+
+While capturing 300mbit/s of packet-data the tool requires about 20\% CPU Usage on a modern Intel Xeon processor. So make sure to have enough spare processing power on your VPN routers.
+
+\todo{CPU and RAM performance impact requirements überprüfen / mit aktuellen Daten ergänzen.}
 
 \section{Installation}
 To install the \tool you need to run the following bash script. It will take care of setting up a tempoary go-environment and getting the proper dependencies. You can also get the latest version of the build-script from the Github-Repository (\url{https://github.com/ipsecdiagtool/ipsecdiagtool/blob/master/build.sh}).
