@@ -13,20 +13,26 @@ Um die Probleme von \acs{PMTUD} zu umgehen und eine korrekte \acs{MTU} ermitteln
 \subsection{Path MTU Discovery}
 Die Path MTU Discovery \acs{PMTUD} ist eine standardisierte Technik um die \acs{MTU} festzustellen.  Bei \acs{IPv4} funktioniert \acs{PMTUD} folgendermassen: Es werden \acs{ICMP} Pakete unterschiedlicher Grösse über die Netzwerkverbindung gesendet. Geräte deren \acs{MTU} kleiner als die Grösse des versendeten Pakets ist verwerfen das Paket und senden stattdessen eine \acs{ICMP} Nachricht mit dem Inhalt "Fragmentation Needed" zurück. So weiss der \acs{PMTUD} Algorithmus dass die versendeten Pakete noch zu gross sind um ihr Ziel zu erreichen. Die versendeten Pakete werden also verkleinert, und der Prozess wiederholt, bis eine Übertragungsgrösse gefunden wird mit der ein Paket den ganzen Pfad ohne Fragmentierung traversieren kann.
 
-Doch wie bereits in der Einleitung angesprochen gibt es bei \acs{PMTUD} ein Problem. Viele Netzwerk-Sicherheit Geräte blockieren \acs{ICMP} Nachrichten. Dies beinhaltet die Errors "Fragmentation Needed" des \acs{PMTUD} Algorithmus. 
+Doch wie bereits in der Einleitung angesprochen gibt es bei \acs{PMTUD} ein Problem. Viele Netzwerk-Sicherheit Geräte blockieren \acs{ICMP} Nachrichten. Dies beinhaltet die Errors "Fragmentation Needed" des \acs{PMTUD} Algorithmus. Bei der \osag wurde eben dieses Problem auch beobachtet, so gibt es \acs{VPN} Tunnels die über schlecht konfigurierte Router von Dritten laufen und so mit
 
 %http://en.wikipedia.org/wiki/Path_MTU_Discovery
 \todo{Citation needed}
 
 \subsection{MTU-Bestimmung - Idee}
-Um die \acs{MTU} der Verbindung zwischen Alice und Bob fest zu stellen werden Pakete mit einer 
+Um das Problem der blockierten \acs{ICMP} Packeten zu vermeiden bestimmt das \tool die \acs{MTU} innerhalb des \acs{VPN} Tunnels. Gegenüber den Routern die normalerweise die \acs{ICMP} Pakete blockieren würden sehen die Pakete des \tool wie normale \acs{IPSec} \acs{ESP}s aus. Sie haben jedoch wie auch die \acs{ICMP} Pakete von \acs{PMTUD} den "Don't Fragment" Flag gesetzt. Dadurch wird verhindert das die Pakete automatisch fragmentiert werden wenn sie die \acs{MTU} eines Geräts überschreiten. Im Gegensatz zu \acs{PMTUD} kann man hier nicht auf ein \acs{ICMP} "Fragmentation Needed" Paket zählen das von einer Netzwerkkomponente beim überschreiten der \acs{MTU} versendet wird. Pakete die, die \acs{MTU} überschreiben werden einfach verworfen. Deshalb muss das \tool auf beiden Seiten des \acs{VPN} Tunnels laufen und Pakete die ankommen beantworten.
+
+Innerhalb des Tunnels wird wie bei \acs{PMTUD} auf \acs{ICMP} Pakete gesetzt. Die vom \tool versendeten Pakete enthalten eine Payload die aus den folgenden Angaben besteht:
+
+\begin{itemize}
+  \item \textbf{AppID:} Eindeutige ID des aktiven \tool. Wird verwendet um mehrere gleichzeitig laufende \tool auf einem Rechner zu unterscheiden.
+  \item \textbf{ChannelID:} ID des GO-Channels von dem das Paket versendet wurde. Wird benötigt um für mehrere Tunnels gleichzeitig die \acs{MTU} festzustellen zu können.
+  \item \textbf{Command:} Die eigentliche Nachricht des Pakets. z.B. "MTU?" als Request oder "OK" als Antwort.
+  \item \textbf{Null-Array:} Ein mit Nullen gefülltes Array von variabler Grösse. Wird verwendet um dem Paket seine vorbestimmte Grösse zu geben.
+\end{itemize}
 
 % GFX Trim left bottom right top
 \includegraphics[trim=10 10 200 10,clip,width=\textwidth]{mainpart/implementation/img/MTUBestimmungErfolgreich}
 
-\subsection{MTU-Bestimmung: Fehlerfall}
-Dieses Sequenz-Diagramm stellt einen möglichen Fehlerfall bei der Bestimmung der MTU dar. Es zeigt wie das \tool den Fehlerfall behandelt. Alice versucht wie beim erfolgreichen Fall durch das versenden von immer grösseren Paketen die ideale MTU für die Verbindung mit Bob zu finden. Bei Punkt 5 sendet Bob keine Antwort mehr. Alice sendet Bob daher ein Paket mit der letzten erfolgreichen Grösse. Auch auf dieses Paket erhält Alice keine Antwort.  ..todo Grafik anpassen..
-Schlussendliche meldet Alice die letzte erfolgreiche MTU mit einer Fehler-Nachricht und bricht den MTU Bestimmungsvorgang ab.
+Die obenstehende Grafik zeigt den weiteren Ablauf der \acs{MTU} Bestimmung mit dem \tool. Alice sendet ein Paket mit dem Command "MTU?" und einer bestimmten Grösse an Bob. Wenn Bob das Paket erhält, sendet er "OK als Antwort. Alice erhöht darauf die Paketgrösse und fragt Bob erneut mit "MTU?" an. Dies wird so lange wiederholt bis das Paket nicht mehr ankommt. Bob erhält also das "MTU?" Paket nicht und kann somit Alice auch keine Antwort schicken. Alice hat jedoch ein Timeout Timer und nach einer vordefinierten Zeit ohne Antwort geht Alice davon aus dass das Paket nicht angekommen ist. Alice sendet nun ein Paket mit der letzten erfolgreichen Grösse um sicher zu Stellen das die Netzwerkverbindung selbst noch besteht und protokolliert dann die letzte erfolgreiche \acs{MTU}.
 
-% GFX Trim left bottom right top
-\includegraphics[trim=10 10 265 10,clip,width=\textwidth]{mainpart/implementation/img/MTUBestimmungFehlerfall}
+\subsection{MTU-Bestimmung - FastMTU}
