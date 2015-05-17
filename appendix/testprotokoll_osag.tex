@@ -1,0 +1,51 @@
+\chapter{Testprotokoll}
+\label{chap:Testprotokoll}
+
+\section{Durchführung}
+\textbf{Datum:} \\
+\textbf{Ort:} \\
+\textbf{Getestete Version (GitHub Hash):} \\
+
+\section{Testfälle}
+
+% \Square = leer, \XBox = mit X, \CheckedBox = mit Häckchen
+\subsection{Allgemein}
+\begin{itemize}
+\item[\Square] \textbf{Kompilierung und Deployment:}\\
+Das \tool lässt sich auf dem Test-System kompilieren und am erwarteten Speicherort (/opt/ipsecdiagtool/) deployen.
+			   
+\item[\Square] \textbf{Konfiguration finden:} \\
+Das Konfigurationsfile wird am korrekten Ort (/opt/ipsecdiagtool/etc/ipsecdiagtool.conf) erstellt und kann im System gefunden werden. 
+			   
+\item[\Square] \textbf{Konfiguration anpassen:} \\
+Das Konfigurationsfile kann verändert werden und wird beim nächsten Programmstart korrekt eingelesen.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Config öffnen, AppID auf 1 setzen.
+  \item Das Tool mit dem Debug-Flag starten
+  \item Überprüfen ob 1 als AppID ausgegeben wird.
+\end{enumerate}
+
+\item[\Square] \textbf{Daemon Installieren:} \\
+Das Tool lässt sich als Daemon installieren und starten.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Das Tool starten via 'ipsecdiagtool install'.
+  \item Überprüfen ob der Daemon verfügbar ist mit 'start ipsecdiagtool', 'status ipsecdiagtool', 'stop ipsecdiagtool'
+\end{enumerate}
+
+\item[\Square] \textbf{Daemon Deinstallieren:} \\
+Der vom Tool installierte Daemon lässt sich wieder entfernen.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Das Tool starten via 'ipsecdiagtool remove'.
+  \item Überprüfen ob der Daemon deinstalliert wurde mit 'start ipsecdiagtool'. Wenn ein Fehler kommt wurde er korrekt deinstalliert.
+\end{enumerate}
+			   
+\end{itemize}
+
+\subsection{MTU}
+\begin{itemize}
+\item[\Square] \textbf{Kompilierung und Deployment:}\\
+Das \tool lässt sich auf dem Test-System kompilieren und am erwarteten Speicherort (/opt/ipsecdiagtool/) deployen.
+		
+
+\end{itemize}
+\subsection{Packetloss}
