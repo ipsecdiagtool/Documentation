@@ -29,14 +29,16 @@ Das Konfigurationsfile kann verändert werden und wird beim nächsten Programmst
 Das Tool lässt sich als Daemon installieren und starten.
 \begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
   \item Das Tool starten via 'ipsecdiagtool install'.
-  \item Überprüfen ob der Daemon verfügbar ist mit 'start ipsecdiagtool', 'status ipsecdiagtool', 'stop ipsecdiagtool'
+  \item SysV wählen.
+  \item Überprüfen ob der Daemon verfügbar ist mit 'service ipsecdiagtool start', 'service ipsecdiagtool status', 'service ipsecdiagtool stop'
 \end{enumerate}
 
 \item[\Square] \textbf{Daemon Deinstallieren:} \\
 Der vom Tool installierte Daemon lässt sich wieder entfernen.
 \begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
   \item Das Tool starten via 'ipsecdiagtool remove'.
-  \item Überprüfen ob der Daemon deinstalliert wurde mit 'start ipsecdiagtool'. Wenn ein Fehler kommt wurde er korrekt deinstalliert.
+  \item SysV wählen.
+  \item Überprüfen ob der Daemon deinstalliert wurde mit 'service ipsecdiagtool start'. Wenn ein Fehler kommt wurde er korrekt deinstalliert.
 \end{enumerate}
 			   
 \end{itemize}
@@ -52,15 +54,23 @@ Sicherstellen das die MTU Discovery lokal korrekt funktioniert.
   \item Das Tool sollte nun die in der Konfiguration eingestellte SnapLen als MTU melden.
 \end{enumerate}
 			   
-\item[\Square] \textbf{MTU Discovery via Tunnel:}\\
+\item[\Square] \textbf{MTU Discovery für ein Tunnel:}\\
 Das Tool soll die MTU eines echten IPSec Tunnels ermitteln.
 \begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
   \item Bestehende Konfigurationsfiles neu erstellen oder anpassen so dass folgende Einstellungen konfiguriert sind: SyslogServer, SourceIP, DestinationIP. Die restlichen Einstellungen könne auf den Default Einträgen belassen werden.
-  \item Das Tool an beiden Enden des Tunnels als Daemon installieren 'ipsecdiagtool install' und starten 'start ipsecdiagtool'.
+  \item Das Tool an beiden Enden des Tunnels als Daemon installieren 'ipsecdiagtool install' und starten 'service ipsecdiagtool start'.
   \item Auf einer Seite des Tunnels die MTU Discovery mit dem lokalen Kommando 'ipsecdiagtool mtu' starten.
   \item Die MTU Discovery wird nun via Tunnel durchgeführt. Das erfolgreiche Resultat sollte auf dem Syslog-Server ersichtlich sein.
 \end{enumerate}
-		
+
+\item[\Square] \textbf{MTU Discovery für mehrere Tunnels:}\\
+Das Tool soll die MTU von mehreren IPSec Tunnels gleichzeitig feststellen.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Bestehende Konfigurationsfiles neu erstellen oder anpassen so dass folgende Einstellungen für 2 oder mehr Tunnels konfiguriert sind: SyslogServer, SourceIP, DestinationIP. Die restlichen Einstellungen könne auf den Default Einträgen belassen werden.
+  \item Das Tool an beiden Enden des Tunnels als Daemon installieren 'ipsecdiagtool install' und starten 'service ipsecdiagtool start'.
+  \item Auf einer Seite des Tunnels die MTU Discovery mit dem lokalen Kommando 'ipsecdiagtool mtu' starten.
+  \item Die MTU Discovery wird nun für alle Tunnels durchgeführt. Das erfolgreiche Resultat sollte auf dem Syslog-Server ersichtlich sein.
+\end{enumerate}
 
 \end{itemize}
 \subsection{Packetloss}
