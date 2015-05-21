@@ -87,3 +87,34 @@ Das Tool soll die gleiche MTU mit einer unterschiedlichen Anzahl an Paketen fest
 
 \end{itemize}
 \subsection{Packetloss}
+\begin{itemize}
+\item[\Square] \textbf{Interaktive Packetloss Discovery:}\\
+Sicherstellen das ESP Pakete verarbeitet werden.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Bestehende Konfigurationsfiles anpassen.  
+  \item Das Tool als Daemon installieren 'ipsecdiagtool install' und starten 'start ipsecdiagtool'.
+  \item Das Tool lokal starten via 'ipsecdiagtool i packetloss'.
+  \item Das Tool sollte nun ankommende und ausgehende ESP-Packete anzeigen.
+\end{enumerate}
+
+\begin{itemize}
+\item[\Square] \textbf{Packetloss via PCAP-File feststellen:}\\
+Sicherstellen, ob Packete eines PCAP-Files korrekt verarbeitet und der Packetloss korrekt angezeigt wird.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Bestehende Konfigurationsfiles anpassen.  
+  \item Das Tool als Daemon installieren 'ipsecdiagtool install' und starten 'start ipsecdiagtool'.
+  \item Das Tool lokal starten via 'ipsecdiagtool i packetloss'.
+  \item Das Tool sollte nun einen Eintrag im Syslog Server erstellen mit der korrekten Meldung über den Verlust von Paketen. Gleichzeitig sollte ein CSV-File mit den Verlorenen Paketen angelegt werden.
+\end{enumerate}
+
+\begin{itemize}
+\item[\Square] \textbf{Packetloss via live Capture feststellen}\\
+Sicherstellen, ob Packete bei live capturing verarbeitet und der Packetloss korrekt angezeigt wird.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Bestehende Konfigurationsfiles anpassen.  
+  \item Das Tool als Daemon installieren 'ipsecdiagtool install' und starten 'start ipsecdiagtool'.
+  \item Das Tool lokal starten via 'ipsecdiagtool i packetloss'.
+  \item Das Tool sollte nun einen Eintrag im Syslog Server erstellen mit der korrekten Meldung über den Verlust von Paketen. Gleichzeitig sollte ein CSV-File mit den Verlorenen Paketen angelegt werden.
+\end{enumerate}
+
+\end{itemize}
