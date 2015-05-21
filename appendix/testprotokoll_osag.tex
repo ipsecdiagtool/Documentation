@@ -25,6 +25,9 @@ Das Konfigurationsfile kann verändert werden und wird beim nächsten Programmst
   \item Überprüfen ob 1 als AppID ausgegeben wird.
 \end{enumerate}
 
+\item[\Square] \textbf{Funktionalität via Help überprüfen:} \\
+Das \tool soll via 'ipsecdiagtool help' gestartet werden. Alle aufgelisteten Kommandos und Beispiele sollen ausgeführt werden um zu überprüfen dass sie korrekt aufgelistet wurden.
+
 \item[\Square] \textbf{Daemon Installieren:} \\
 Das Tool lässt sich als Daemon installieren und starten.
 \begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
@@ -45,7 +48,7 @@ Der vom Tool installierte Daemon lässt sich wieder entfernen.
 
 \subsection{MTU}
 \begin{itemize}
-\item[\Square] \textbf{Lokale MTU Discovery:}\\
+\item[\Square] \textbf{Interaktive MTU Discovery:}\\
 Sicherstellen das die MTU Discovery lokal korrekt funktioniert.
 \begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
   \item Bestehende Konfigurationsfiles löschen.  
@@ -70,6 +73,16 @@ Das Tool soll die MTU von mehreren IPSec Tunnels gleichzeitig feststellen.
   \item Das Tool an beiden Enden des Tunnels als Daemon installieren 'ipsecdiagtool install' und starten 'service ipsecdiagtool start'.
   \item Auf einer Seite des Tunnels die MTU Discovery mit dem lokalen Kommando 'ipsecdiagtool mtu' starten.
   \item Die MTU Discovery wird nun für alle Tunnels durchgeführt. Das erfolgreiche Resultat sollte auf dem Syslog-Server ersichtlich sein.
+\end{enumerate}
+
+\item[\Square] \textbf{MTU Discovery mit unterschiedlicher Anzahl Paketen:}\\
+Das Tool soll die gleiche MTU mit einer unterschiedlichen Anzahl an Paketen feststellen.
+\begin{enumerate} \itemsep1pt \parskip0pt \parsep0pt
+  \item Bestehende Konfigurationsfiles neu erstellen oder anpassen so dass folgende Einstellungen konfiguriert sind: SyslogServer, SourceIP, DestinationIP, ConcurrentPackets. Die restlichen Einstellungen könne auf den Default Einträgen belassen werden.
+  \item Das Tool an beiden Enden des Tunnels als Daemon installieren 'ipsecdiagtool install' und starten 'service ipsecdiagtool start'.
+  \item Auf einer Seite des Tunnels die MTU Discovery mit dem lokalen Kommando 'ipsecdiagtool mtu' starten.
+  \item Nach einem erfolgreichen Durchlauf soll der in "ConcurrentPackets" eingestellte Wert geändert werden. (z.B. in 10er Schritten erhöhen). Die jeweils festgestellte MTU soll aufgeschriben werden.
+    \item Am Schluss sollen die notierten MTU Werte verglichen werden. Der Test ist erfolgreich wenn bei 5 Tests nicht mehr als eine Abweichung auftritt.
 \end{enumerate}
 
 \end{itemize}
