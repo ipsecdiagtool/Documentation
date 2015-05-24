@@ -2,20 +2,22 @@
 \label{sec:Arbeitsumgebung}
 
 \subsection{Infrastruktur}
-Jedes Teammitglied hat ein persönliches Notebook welches hauptsächlich zur Projektbewältigung eingesetzt wird. Zusätzlich wurden von der \acs{HSR} 2 Desktop-Rechner sowie ein \acs{VPS} in der DMZ zur Verfügung gestellt.
-Zur Versionsverwaltung wird Git auf Github verwendet. Für die Zeiterfassung und Issue-Verwaltung wurde YouTrack auf dem \acs{VPS} installiert.
+Jedes Teammitglied hat ein persönliches Notebook welches hauptsächlich zur Projektbewältigung eingesetzt wird. Zusätzlich werden von der \acs{HSR} 2 Desktop-Rechner im \acs{SA} Zimmer sowie ein \acs{VPS} in der DMZ zur Verfügung gestellt.
+Zur Versionsverwaltung wird Git auf Github.com verwendet. Für die Zeiterfassung und Issue-Verwaltung wurde YouTrack 6.0 auf dem \acs{VPS} installiert.
 
 \subsection{Tools \& Services}
-In diesem Projekt werden die folgende Tools \& Services eingesetzt:
+In diesem Projekt werden die folgende Applikationen \& Services genutzt:
 
 \begin{itemize}
-  \item \textbf{git} \newline wird als Versionsverwaltungssystem eingesetzt.
+  \item \textbf{git 2.3.0} \newline wird als Versionsverwaltungssystem eingesetzt.
   \item \textbf{Github.com} \newline hostet unsere Git-Repositories, welche öffentlich zugänglich sind.
-  \item \textbf{Jetbrains YouTrack} \newline wird als Issue-Tool und zur Zeiterfassung eingesetzt. 
-  \item \textbf{Dropbox} \newline wird fürs Backup der YouTrack Datenbank und als Datenablage für flüchtige Dokumente \& Dateien verwendet.
-  \item \textbf{\LaTeX} \newline wird als Programmiersprache für die Dokumentation eingesetzt.
-  \item \textbf{Jenkins} \newline wird als \acl{CI} Server zum automatischen generieren der LaTex Dokumentation verwendet.
-  %todo
-  \item \textbf{Golang} \newline wird als Programmiersprache für das \tool eingesetzt.
-  \item \textbf{goPacket} \newline wir als \acs{PCAP}-Library für das Projekt eingesetzt.
+  \item \textbf{Jetbrains YouTrack Stand-Alone 6.0.12634} \newline wird als Tool zur die Zeiterfassung und das Issue Tracking eingesetzt.
+  \item \textbf{Dropbox} \newline wird für das Backup der YouTrack Datenbank und als Datenablage für flüchtige Dokumente \& Dateien verwendet.
+  \item \textbf{\LaTeX  2014/05/01} \newline wird als Programmiersprache für die Dokumentation eingesetzt.
+  \item \textbf{Jenkins 1.614} \newline wird als \acl{CI} Server zum automatischen builden des \tool sowie der LaTex Dokumentation verwendet.
+  \item \textbf{Go 1.4.2} \newline wird als Programmiersprache für das \tool eingesetzt.
+  \item \textbf{libpcap 0.8-dev} \newline wird als \acs{PCAP}-Library für das \tool eingesetzt.
+  \item \textbf{gopacket #8985facf0b} \newline wird als Wrapper für die libpcap Library verwendet.
+  \item \textbf{Ubuntu 14.04.2 LTS} \newline wird als Betriebsystem für unsere Entwicklungsrechner verwendet.
+  \item \textbf{strongSwan 5.3.0} \newline wird verwendet um die für das Testen benötigten \acs{IPSec} \acs{VPN} Tunnels aufzusetzen.
 \end{itemize}
