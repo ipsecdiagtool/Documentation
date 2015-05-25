@@ -15,3 +15,5 @@ index_ba.pdf
 *.log
 *.fls
 *.toc
+*.bbl
+*.blg

@@ -4,15 +4,11 @@
 \subsection{Einleitung}
 Mithilfe der \acs{MTU} (Maximum Transmission Unit) wird festgelegt wie gross ein Netzwerkpaket maximal sein darf, so dass es nicht in mehrere Pakete aufgeteilt werden muss. Wenn die \acs{MTU} korrekt bestimmt wurde dann wird Paket-Fragmentierung verhindert und die Performance der Netzwerkverbindung ist deutlich besser. 
 
-Normalerweise wird die \acs{MTU} automatisch via \acs{PMTUD} (Path MTU Discovery) ermittelt. Dabei werden \acs{ICMP} Pakete unterschiedlicher Grösse die mit einem "Don't fragment" Flag versehen sind über die Verbindung gesandt. Wenn ein solches Paket auf ein Netzwerkgerät trifft dass eine kleinere \acs{MTU} konfiguriert hat als die Paketgrösse wird das Paket nicht weitergesendet, stattdessen wird ein \acs{ICMP} Paket mit dem Inhalt "Fragmentation needed" retourniert. So weiss der \acs{PMTUD} Algorithmus dass die \acs{MTU} der Verbindung überschritten wurde.
+Normalerweise wird die \acs{MTU} automatisch via \acs{PMTUD} (Path MTU Discovery) ermittelt. Dabei werden \acs{ICMP} Pakete unterschiedlicher Grösse die mit einem "Don't fragment" Flag versehen sind über die Verbindung gesandt. Wenn ein solches Paket auf ein Netzwerkgerät trifft dass eine kleinere \acs{MTU} konfiguriert hat als die Paketgrösse wird das Paket nicht weitergesendet, stattdessen wird ein \acs{ICMP} Paket mit dem Inhalt "Fragmentation needed" retourniert. So weiss der \acs{PMTUD} Algorithmus dass die \acs{MTU} der Verbindung überschritten wurde \cite[:131]{rfc1191}.
 
-\acs{PMTUD} hat jedoch ein Problem. Router die, die \acs{ICMP} Pakete weiterleiten oder aber ein "Fragmentation needed" Paket zurücksenden sollten tun dies nicht immer. Dieses Fehlverhalten gibt es aus mehreren Gründen. Zum einen wegen Kernel-Bugs, Fehlkonfigurationen und zum anderen auch weil Firewalls manchmal so konfiguriert werden dass sie \acs{ICMP} Nachrichten nicht durchlassen auf Grund von Sicherheitsbedenken.
+\acs{PMTUD} hat jedoch ein Problem. Router die, die \acs{ICMP} Pakete weiterleiten oder aber ein "Fragmentation needed" Paket zurücksenden sollten tun dies nicht immer. Dieses Fehlverhalten gibt es aus mehreren Gründen. Zum einen wegen Kernel-Bugs, Fehlkonfigurationen und zum anderen auch weil Firewalls manchmal so konfiguriert werden dass sie \acs{ICMP} Nachrichten nicht durchlassen auf Grund von Sicherheitsbedenken \cite[:137]{rfc2923}.
 
 Da man sich also nicht auf \acs{PMTUD} verlassen kann um die \acs{MTU} einer Verbindung festzustellen wird mit dieser Arbeit eine \acs{MTU} Discovery implementiert die innerhalb einer \acs{IPSec} \acs{VPN} Verbindung durchgeführt werden kann.
-
-%http://en.wikipedia.org/wiki/Path_MTU_Discovery
-%http://tools.ietf.org/html/rfc2923
-\todo{Citation needed}
 
 \subsection{Path MTU Discovery}
 Die Path MTU Discovery \acs{PMTUD} ist eine standardisierte Technik um die \acs{MTU} festzustellen.  Bei \acs{IPv4} funktioniert \acs{PMTUD} folgendermassen: Es werden \acs{ICMP} Pakete unterschiedlicher Grösse über die Netzwerkverbindung gesendet. Geräte deren \acs{MTU} kleiner als die Grösse des versendeten Pakets ist verwerfen das Paket und senden stattdessen eine \acs{ICMP} Nachricht mit dem Inhalt "Fragmentation Needed" zurück. So weiss der \acs{PMTUD} Algorithmus dass die versendeten Pakete noch zu gross sind um ihr Ziel zu erreichen. Die versendeten Pakete werden also verkleinert, und der Prozess wiederholt, bis eine Übertragungsgrösse gefunden wird mit der ein Paket den ganzen Pfad ohne Fragmentierung traversieren kann.
