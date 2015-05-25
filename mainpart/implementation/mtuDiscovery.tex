@@ -4,29 +4,28 @@
 \subsection{Einleitung}
 Mithilfe der \acs{MTU} (Maximum Transmission Unit) wird festgelegt wie gross ein Netzwerkpaket maximal sein darf, so dass es nicht in mehrere Pakete aufgeteilt werden muss. Wenn die \acs{MTU} korrekt bestimmt wurde dann wird Paket-Fragmentierung verhindert und die Performance der Netzwerkverbindung ist deutlich besser. 
 
+\subsection{Path MTU Discovery}
 Normalerweise wird die \acs{MTU} automatisch via \acs{PMTUD} (Path MTU Discovery) ermittelt. Dabei werden \acs{ICMP} Pakete unterschiedlicher Grösse die mit einem "Don't fragment" Flag versehen sind über die Verbindung gesandt. Wenn ein solches Paket auf ein Netzwerkgerät trifft dass eine kleinere \acs{MTU} konfiguriert hat als die Paketgrösse wird das Paket nicht weitergesendet, stattdessen wird ein \acs{ICMP} Paket mit dem Inhalt "Fragmentation needed" retourniert. So weiss der \acs{PMTUD} Algorithmus dass die \acs{MTU} der Verbindung überschritten wurde \cite[:131]{rfc1191}.
 
 \acs{PMTUD} hat jedoch ein Problem. Router die, die \acs{ICMP} Pakete weiterleiten oder aber ein "Fragmentation needed" Paket zurücksenden sollten tun dies nicht immer. Dieses Fehlverhalten gibt es aus mehreren Gründen. Zum einen wegen Kernel-Bugs, Fehlkonfigurationen und zum anderen auch weil Firewalls manchmal so konfiguriert werden dass sie \acs{ICMP} Nachrichten nicht durchlassen auf Grund von Sicherheitsbedenken \cite[:137]{rfc2923}.
 
 Da man sich also nicht auf \acs{PMTUD} verlassen kann um die \acs{MTU} einer Verbindung festzustellen wird mit dieser Arbeit eine \acs{MTU} Discovery implementiert die innerhalb einer \acs{IPSec} \acs{VPN} Verbindung durchgeführt werden kann.
 
-\subsection{Path MTU Discovery}
-Die Path MTU Discovery \acs{PMTUD} ist eine standardisierte Technik um die \acs{MTU} festzustellen.  Bei \acs{IPv4} funktioniert \acs{PMTUD} folgendermassen: Es werden \acs{ICMP} Pakete unterschiedlicher Grösse über die Netzwerkverbindung gesendet. Geräte deren \acs{MTU} kleiner als die Grösse des versendeten Pakets ist verwerfen das Paket und senden stattdessen eine \acs{ICMP} Nachricht mit dem Inhalt "Fragmentation Needed" zurück. So weiss der \acs{PMTUD} Algorithmus dass die versendeten Pakete noch zu gross sind um ihr Ziel zu erreichen. Die versendeten Pakete werden also verkleinert, und der Prozess wiederholt, bis eine Übertragungsgrösse gefunden wird mit der ein Paket den ganzen Pfad ohne Fragmentierung traversieren kann.
+\subsection{MTU Discovery innerhalb des Tunnels}
+Um die im vorherigen Kapitel erwähnten Probleme von \acs{PMTUD} zu vermeiden wird die \acs{MTU} vom im \tool implementierten Algorithmus innerhalb des \acs{VPN} Tunnels festgestellt.
 
-Doch wie bereits in der Einleitung angesprochen gibt es bei \acs{PMTUD} ein Problem. Viele Netzwerk-Sicherheit Geräte blockieren \acs{ICMP} Nachrichten. Dies beinhaltet die Errors "Fragmentation Needed" des \acs{PMTUD} Algorithmus. Bei der \osag wurde eben dieses Problem auch beobachtet, so gibt es \acs{VPN} Tunnels die über schlecht konfigurierte Router von Dritten laufen und so mit
+Dazu werden \acs{ICMP} Pakete vom Typ "ICMPv4TypeEchoRequest" und "ICMPv4TypeEchoReply" verwendet. Diese Pakete werden wie bei \acs{PMTUD} mit einem "Don't fragment" Flag versehen. Im Unterschied zu \acs{PMTUD} werden sie aber innerhalb des \acs{VPN} Tunnels verschickt und werden daher in \acs{ESP}s gekapselt. Ausserhalb des Tunnels sind sie so nicht unterscheidbar vom normalen Verkehrs des Tunnels und können daher nicht blockiert werden. Der "Don't fragment" Flag wird aber bis in die \acs{ESP} Hülle weitergezogen so dass auch das \acs{ESP} welches das \acs{ICMP} Paket transportiert nicht fragmentiert wird.
 
-%http://en.wikipedia.org/wiki/Path_MTU_Discovery
-\todo{Citation needed}
+\todo{Screenshot Ausschnitt das ESP mit "Don't fragment" flag zeigt.}
 
-\subsection{MTU-Bestimmung - Idee}
-Um das Problem der blockierten \acs{ICMP} Packeten zu vermeiden bestimmt das \tool die \acs{MTU} innerhalb des \acs{VPN} Tunnels. Gegenüber den Routern die normalerweise die \acs{ICMP} Pakete blockieren würden sehen die Pakete des \tool wie normale \acs{IPSec} \acs{ESP}s aus. Sie haben jedoch wie auch die \acs{ICMP} Pakete von \acs{PMTUD} den "Don't Fragment" Flag gesetzt. Dadurch wird verhindert das die Pakete automatisch fragmentiert werden wenn sie die \acs{MTU} eines Geräts überschreiten. Im Gegensatz zu \acs{PMTUD} kann man hier nicht auf ein \acs{ICMP} "Fragmentation Needed" Paket zählen das von einer Netzwerkkomponente beim überschreiten der \acs{MTU} versendet wird. Pakete die, die \acs{MTU} überschreiben werden einfach verworfen. Deshalb muss das \tool auf beiden Seiten des \acs{VPN} Tunnels laufen und Pakete die ankommen beantworten.
+Um den \acs{MTU} Discovery Vorgang zu starten wird jeweils ein "ICMPv4TypeEchoRequest" versendet. Wenn auf dem Ziel Computer Ping Replys aktiviert sind dann löst dieses Paket eine automatische Antwort aus die mit dem gleichen Paketinhalt zurückgeschickt wird. Wenn Ping Replys nicht aktiviert sind kann auch das \tool diese Arbeit übernehmen und eine passende Antwort zurückschicken.
 
-Innerhalb des Tunnels wird wie bei \acs{PMTUD} auf \acs{ICMP} Pakete gesetzt. Die vom \tool versendeten Pakete enthalten eine Payload die aus den folgenden Angaben besteht:
+Alle vom \tool verschickten \acs{ICMP} Pakete haben jeweils die folgende Payload:
 
 \begin{itemize}
-  \item \textbf{AppID:} Eindeutige ID des aktiven \tool. Wird verwendet um mehrere gleichzeitig laufende \tool auf einem Rechner zu unterscheiden.
-  \item \textbf{ChannelID:} ID des GO-Channels von dem das Paket versendet wurde. Wird benötigt um für mehrere Tunnels gleichzeitig die \acs{MTU} festzustellen zu können.
-  \item \textbf{Command:} Die eigentliche Nachricht des Pakets. z.B. "MTU?" als Request oder "OK" als Antwort.
+  \item \textbf{AppID:} Eindeutige ID des aktiven \tool. Wird verwendet um mehrere gleichzeitig laufende \tool auf einem Rechner zu unterscheiden. Die AppID wird entweder in der Konfiguration fix festgelegt oder auf 0 gesetzt. Wenn die AppID in der Konfiguration auf 0 gesetzt wurde dann wird beim Programmstart eine zufällige AppID generiert.
+  \item \textbf{ChannelID:} ID des GO-Channels von dem das Paket versendet wurde. Wird benötigt um für mehrere Tunnels gleichzeitig die \acs{MTU} festzustellen zu können. Die ChannelID wird jeweils beim Start eines \acs{MTU} Discovery Vorgangs zugeteilt.
+  \item \textbf{Command:} Die eigentliche Nachricht des Pakets. Wird verwendet um sicherzustellen dass dieses \acs{ICMP} Paket wirklich von einem \tool versendet wurde und nicht ein sonstiges \acs{ICMP} Paket.
   \item \textbf{Null-Array:} Ein mit Nullen gefülltes Array von variabler Grösse. Wird verwendet um dem Paket seine vorbestimmte Grösse zu geben.
 \end{itemize}
 
