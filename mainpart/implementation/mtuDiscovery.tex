@@ -46,6 +46,12 @@ Für alle Pakete die auf der anderen Seite des Tunnels ankommen wird nun eine An
 Mit FastMTU weiss man also bereits im vorraus wie lange das Finden der exakten \acs{MTU} dauern wird. Bei einer MTU zwischen 0-2000 Bytes werden 3 Batches an Paketen versendet. Pro Batch muss jeweils die Dauer des Timeout-Timers gewartet werden. Gemäss der \osag ist ein Timeout von 10 Sekunden realistisch. Daher hätte das Bestimmen diese \acs{MTU} 30Sekunden gedauert.
 Die verbrauchte Zeit beim Bestimmen von FastMTU lässt sich sehr leicht via der Konfiguration optimieren. So hat man die Möglichkeit den Range stärker einzuschränken, den Timeout zu verkürzen oder aber mehr Pakete pro Batch zu versenden.
 
-\includegraphics[trim=0 0 0 0,clip,width=\textwidth]{mainpart/implementation/img/FastMTUAlgorithm}
+\begin{figure}[ht]
+    \begin{center}
+        \includegraphics[trim=0 0 0 0,clip,width=\textwidth]{mainpart/implementation/img/FastMTUAlgorithm}
+    \end{center}
+    \caption{Ablauf einer MTU Discovery zwischen 0 und 2000Bytes}
+    %\label{fig:AST_function_call_with_and_without_template_id}
+\end{figure}
 
 Auch wenn die \acs{MTU} sich ausserhalb des Ranges befindet wird sie von FastMTU noch korrekt detektiert. Wenn nämlich alle Pakete eines Batches eine erfolgreiche Antwort der Gegenseite generieren, dann wird der nächste Range einfach um die Grösse des überprüften Range vergrössert. Im Beispiel mit einem Range von 0-2000 Bytes würde jetzt einfach 2000-4000 Bytes überprüft.
