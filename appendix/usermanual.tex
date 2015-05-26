@@ -119,3 +119,59 @@ Whenever a \acs{MTU} discovery process is started a message is sent to the syslo
 There are no additional steps involved to detect packet loss. Whenever the daemon is running, it is automatically detecting packet loss. The results of the packet loss detection are sent to the syslog server specified in the configuration and also written to a file located at \code{/var/log/}.
 \todo{Jan: check if correct location}
 
+\subsection{Interactive MTU Discovery}
+In order to launch a interactive \acs{MTU} discovery you need to run the command \code{ipsecdiagtool i mtu}. This will start the \acs{MTU} discovery for all configured tunnels and display a live result in the console. A successful discovery process may look like the following listing.
+
+\begin{lstlisting}[language=bash, caption=Successful MTU Discovery]
+2015/05/27 00:47:57 MTU Discovery package initialized.
+2015/05/27 00:47:57 Interactive testing
+Syslog Info: Starting MTU Discovery 1/1 between 192.168.0.10 and 192.168.0.11. Reported by AppID 97691.
+2015/05/27 00:48:07 ---------------------------------------------------
+2015/05/27 00:48:07 ChanID 0 Range: 0 - 2000   itStep: 100   Timeout: 10ns
+2015/05/27 00:48:07 Largest successful packet: 1500
+2015/05/27 00:48:07 Received: 100 200 300 400 500 600 700 800 900 1000 1100 1200 1300 1400 1500 
+2015/05/27 00:48:07 Missing: 0 1600 1700 1800 1900 2000 
+2015/05/27 00:48:17 ---------------------------------------------------
+2015/05/27 00:48:17 ChanID 0 Range: 1500 - 1600   itStep: 5   Timeout: 10ns
+2015/05/27 00:48:17 Largest successful packet: 1500
+2015/05/27 00:48:17 Received: 1500 
+2015/05/27 00:48:17 Missing: 1505 1510 1515 1520 1525 1530 1535 1540 1545 1550 1555 1560 1565 1570 1575 1580 1585 1590 1595 1600 
+2015/05/27 00:48:27 ---------------------------------------------------
+2015/05/27 00:48:27 ChanID 0 Range: 1500 - 1505   itStep: 1   Timeout: 10ns
+2015/05/27 00:48:27 Largest successful packet: 1500
+2015/05/27 00:48:27 Received: 1500 
+2015/05/27 00:48:27 Missing: 1501 1502 1503 1504 1505 
+Syslog Info: MTU between 127.0.0.1 and 127.0.0.1 is 1500. Reported by AppID 97691.
+\end{lstlisting}
+
+\subsection{Interactive Packet Loss Detection}
+To start a interactive packet loss detection you can run the tool with \code{ipsecdiagtool i pl}. It will now listen to the configured port and display all incomming packets. If you want to run a specific test you can also specify the location of a pcap file as an additional parameter. For example \code{ipsecdiagtool i pl /local/awesome.pcap}. Since pcap files can be easily manipulated they're ideal to run special test scenarios.
+\clearpage
+\subsection{Configuration}
+The \entool{} stores its configuration as \code{../[execution directory]/etc/ipsecdiagtool.json}. If there is no \code{ipsecdiagtool.json} file at \code{../[execution directory]/etc} the tool will check if there is a configuration file in your current working directory. This behaviour was implemented to allow for a permanent config when launching the program from an \acs{IDE}. If there is no config in your current working directory a new config is created in \code{../[execution directory]/etc} containing default values.
+The config is valid json and can be edited through a normal editor such as \enquote{vim} or \enquote{nano}.
+
+\begin{lstlisting}[language=json, caption=Sample configuration]
+{
+    "ApplicationID": 0,
+    "Debug": false,
+    "SyslogServer": "localhost:514",
+    "PcapSnapLen": 1516,
+    "MTUConfList": [
+        {
+            "SourceIP": "127.0.0.1",
+            "DestinationIP": "127.0.0.1",
+            "Timeout": 10,
+            "MTURangeStart": 0,
+            "MTURangeEnd": 2000,
+            "ConcurrentPackets": 20
+        }
+    ],
+    "WindowSize": 32,
+    "InterfaceName": "any",
+    "AlertTime": 60,
+    "AlertCounter": 10,
+    "PcapFile": "", 
+    "CfgVers": 14
+}
+\end{lstlisting}
