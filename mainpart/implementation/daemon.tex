@@ -1,0 +1,22 @@
+\section{Daemon}
+\label{sec:Daemon}
+
+\subsection{Einleitung}
+Ein Daemon ist ein Programm das als Hintergrund Prozess gestartet wird und so nicht unter der direkten Kontrolle eines Users ist. Damit das \tool permanent auf einem Router laufen kann muss es die Fähigkeit haben als Daemon gestartet zu werden.
+
+Um als Daemon zu laufen wird typischerweise der folgende Start-Vorgang umgesetzt:
+
+\begin{enumerate}
+  \item Das Programm wird vom User gestartet
+  \item Es erzeugt einen Fork von sich selbst
+  \item Dem Fork wird der init Prozess zugewiesen (Prozess Nr. 1)
+  \item Das ursprünglich gestartete Programm, sprich Parent-Prozess wird beendet.
+\end{enumerate}
+
+\subsection{Init Skript}
+Unter Unix Systemen werden Daemons normalerweise durch ein init Skript gestartet. Je nach Linux Distribution unterscheidet sich die bevorzugte Art des init Skripts. Die meisten Distribution unterstützen zwar noch das init-System (\enquote{SysVinit}) des Unix-Betriebsystems System V. Jedoch gibt seit einiger Zeit Bestrebungen dies abzulösen. So wird unter Ubuntu zum Beispiel empfohlen das init-System \enquote{Upstart} zu verwenden. Andere Distributionen setzten hingegen auf \enquote{systemd} als Nachfolger von \enquote{SysVinit}.
+Andere Betriebsysteme wie OS X und Windows haben wiederum andere init-Systeme.
+
+\subsection{Implementierung im \tool}
+Um dem \tool die nötige Daemon Funktionalität zu geben und trotzdem die Kompatibilität zu unterschiedlichen Linux Distributionen sowie OS X und Windows nicht zu verlieren wurde die Go Service-Library \enquote{kardianos/service} verwendet. Diese Library abstrahiert das installieren des Daemons und erstellt je nach verwendetem Betriebsystem ein passendes init-Skript.
+
