@@ -1,16 +1,37 @@
-\section{Golang und goPacket}
-\label{sec:Golang und goPacket}
+\section{Golang, goPacket und goProbe}
+\label{sec:Golang, goPacket und goProbe}
 
 \subsection{Golang}
-Golang, auch Go genannt, ist eine eher junge Programmiersprache seit 2007 von Google Inc. entwickelt wurde. Golang hat einen C-ähnlichen Syntax, bietet aber viele Eigenschaften von modernen Programmiersprachen wie zum Beispiel Garbage Collection, Type-Safety, Dynamic-Typing, Closures und eine grosse Standard-Library.
-Im Oktober 2009 wurde die Golang der Öffentlichkeit als Open Source zur Verfügung gestellt.
+Golang, auch Go genannt, ist eine eher junge Programmiersprache die 2007 von der Google Inc. entwickelt wurde \cite[:10]{techcrunch_golang}. Golang hat einen C-ähnlichen Syntax, bietet aber viele Eigenschaften von modernen Programmiersprachen wie zum Beispiel Garbage Collection, Type-Safety, Dynamic-Typing, Closures und eine grosse Standard-Library.\cite[:1-30]{effective_go}
+Im Oktober 2009 wurde Go der Öffentlichkeit als Open Source zur Verfügung gestellt.
 
-\subsection{Evaluation}
-Unseren ersten Kontakt mit Golang haben wir durch GoProbe von Open Systems gewonnen.
+Unseren ersten Kontakt mit Go haben wir durch die Applikation goProbe der \osag gewonnen.
 GoProbe erlaubt leichtgewichtiges aggregieren von Paketen und deren effiziente Speicherung. Eine Abfrage der gespeicherten Paketen ist via Querying Flows möglich.
 
-Die Installation von Golang und das Builden von goProbe waren etwas harzig. Es hat aber schlussendlich geklappt. Die Erkenntnisse wie man goProbe erfolgreich installieren kann sind im Anhang dokumentiert.
+Die Installation von Go und das Builden von goProbe waren zu Beginn etwas harzig. So müssen für die Verwendung von Go mehrere Umgebungsvariablen festgelegt werden. Go arbeitet mit der Idee eines zentralen Go-Workspace der via der Umgebungsvariable \enquote{GOTPATH} festgelegt wird. In diesem Workspace müssen alle Go-Projekte und Go-Libraries abgelegt werden.
 
-GoProbe besteht aus drei Modulen. Zum einen ein Modul das selbst goProbe heisst und zum aufzeichnen von Paketen verwendet wird. Die von goProbe aufgezeichneten Pakete werden dann mit goDB gespeichert. GoDB ist eine speziell für Netzwerk-Pakete entwickelte Datenbank. Die gespeicherten Pakete können dann mit goQuery wieder abgefragt werden. Ausserdem steht noch ein optionales Modul namens goConvert zur Verfügung. Die drei Module sind aber ein vollständiges Programm und nicht Bibliotheken die wir einfach so in unser \tool einbinden können. Das von uns entwickelte \tool würde GoProbe als Vorbild nehmen aber wahrscheinlich keine Dependencies darauf haben. In der momentanen Evaluierungs-Phase ist es aber ein gutes Versuchsobjekt für die Performance-Tests.
+\begin{lstlisting}[language=bash, caption=Typische Go Workspace Struktur]
+GO_WORKSPACE
+	bin/ # Compiled executables of go programs
+    		hello
+	pkg/ # Package objects
+    		linux_amd64/                     
+        		github.com/golang/example/   
+				stringutil.a	
+	src/ # Source files in their git repositories                       
+    		github.com/golang/example/       
+			.git/
+			hello/                       
+				hello.go	
+\end{lstlisting}
 
-Golang selbst hat einige sehr angenehme Eigenschaften, so lässt sich der Code z.B. sehr einfach mit dem mitgelieferten godoc dokumentieren. Auch das Installieren von Dependencies via. 'go get package-name' ist sehr hilfreich, vorausgesetzt man hat die GOPATH-Umgebungsvariablen korrekt gesetzt.
+Dies ist eine grosse Umstellung wenn man sich gewohnt ist mit einer Projekt-Orientierten Struktur zu arbeiten wo einzelne Projekte nicht nach der Programmiersprache sortiert sind. Dazu kommt auch dass die unter Ubuntu via \enquote{apt-get} installierte Version von Go stark veraltet ist und man am besten eine aktuelle Version manuell installiert.
+
+Golang hat aber auch einige sehr angenehme Eigenschaften, so lässt sich der Code z.B. sehr einfach mit dem mitgelieferten godoc dokumentieren. Auch das Installieren von Dependencies via. 'go get package-name' ist sehr hilfreich, vorausgesetzt man hat die GOPATH-Umgebungsvariablen korrekt gesetzt.
+
+\subsection{goPacket}
+GoPacket ist ein in Go geschriebener Wrapper für die C-Library libpcap. GoPacket bietet Packet Decoding und \acs{PCAP} Funktionalität für die Go Programmiersprache\cite[:4]{goPacket}. GoPacket wurde ursprünglich von Andreas Krennmair entwickelt und wird jetzt aktiv von der Google Inc. unterhalten. Die Library ist dadurch zukunftssicher und wir sind zuversichtlich das sie sich als qualitativ hochwertig erweist.
+
+\subsection{goProbe}
+GoProbe ist eine von der \osag entwickelte Applikation. GoProbe dient der gezielten Analyse von Network Traffic Patterns. Es erlaubt Netzwerk Verkehr aufzuzeichnen und diesen auf Key Deskriptoren herunter zu brechen und dann zu untersuchen \cite[:2]{readme_goProbe}. 
+GoProbe besteht aus drei Modulen. Zum einen ein Modul das selbst goProbe heisst und zum aufzeichnen von Paketen verwendet wird. Die von goProbe aufgezeichneten Pakete werden dann mit goDB gespeichert. GoDB ist eine speziell für Netzwerk-Pakete entwickelte Datenbank. Die gespeicherten Pakete können dann mit goQuery wieder abgefragt werden. Ausserdem steht noch ein optionales Modul namens goConvert zur Verfügung. GoProbe wurde aber nicht gem. den Paradigmen von Go veröffentlich und kann daher nicht via \enquote{go get} als Library bezogen und in diesem Projekt weiterverwendet werden. Nichts desto trotz ist goProbe ein guter Kandidat für die Evaluierung von Java und Go als Sprachen. Die Erkenntnisse wie man goProbe erfolgreich installieren kann sind im Anhang dokumentiert.
