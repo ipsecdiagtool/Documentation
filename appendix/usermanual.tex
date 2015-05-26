@@ -75,13 +75,13 @@ install &  & Install the \entool{} as a daemon.\\
 uninstall & remove & Remove the \entool{}'s daemon.\\
 i mtu &  & Run the mtu discovery in the interactive mode. The daemon does not need to be installed for this mode.\\
 i pl [path ]&  & Run the packet loss detection in the interactive mode. The daemon does not need to be installed for this mode. The last argument is optional. You can specify a pcap file for testing purposes, or leave it blank and the network interface specified in the configuration will be used.\\
-mtu-discovery & mtu & Tell a running daemon to start detecting the MTU for all configured tunnels. \\
+mtu [srcIP] [dstIP] & mtu-discovery & Tell a running daemon to start detecting the MTU for all configured tunnels. The \entool{} accepts a optional source and destination ip if you want to target a daemon running on a remote computer. \\
 debug &  & Show the path to the configuration file, the applicationID and other information useful for debugging.\\
 about & version & Display general information about the \entool{}. \\
 help & & A list of commands and examples on how to use them.
 \end{tabularx}
 
-\subsection{Daemon installation}
+\subsection{Daemon Installation}
 To install the \entool{} as a daemon you need to launch it as superuser via \code{ipsecdiagtool install}. Then a list of potentially supported init-systems for your operating system is displayed. For the Linux operating system you are typically given the options in the listing below.
 
 \begin{lstlisting}[language=bash, caption=Supported linux init-systems]
@@ -96,10 +96,10 @@ If you are using Ubuntu, choose \code{linux-upstart}, otherwise go with \code{un
 
 It is not recommended to install the \entool{} with multiple init-systems at the same time.
 
-\subsection{Daemon uninstallation}
+\subsection{Daemon Uninstall}
 To uninstall the daemon of \entool{} you should first stop the tool via \code{service ipsecdiagtool stop}. Now you can run \code{ipsecdiagtool uninstall} as superuser and then choose the daemon you wish to remove. You will get a message whether or not the removal was successful. Alternatvely you can go to the location where the daemon init scripts are stored on your operating system and manually remove it. On Ubuntu this is \code{/etc/init.d/} for \code{linux-systemv} or \code{/etc/init/} for \code{linux-upstart}.
 
-\subsection{Daemon control}
+\subsection{Daemon Control}
 A successfully installed daemon can be controlled via the following simple commands:
 
 \begin{enumerate}
@@ -107,4 +107,15 @@ A successfully installed daemon can be controlled via the following simple comma
   \item \code{service ipsecdiagtool status}: Shows whether the daemon is running or not.
   \item \code{service ipsecdiagtool stop}: Stops the daemon.
 \end{enumerate}
+
+\subsection{Daemon MTU Discovery}
+To launch a \acs{MTU} discovery process on the daemon you need to run the local application via \code{ipsecdiagtool mtu}. If you want to start the \acs{MTU} discovery process on a remote machine you can do so by specifying an optional source and destination ip address. For example \code{ipsecdiagtool mtu 192.168.0.10 192.168.0.11} would launch a mtu discovery process on the remote machine \code{192.168.0.11}.
+
+It is not advisable to start a mtu discovery process multiple times without waiting for a running process to finish. The application will not crash but the result of the \acs{MTU} discovery may not be valid.
+
+Whenever a \acs{MTU} discovery process is started a message is sent to the syslog server specified in the configuration. Another message containing the result is sent when the discovery process is finished.
+
+\subsection{Daemon Packet Loss Detection}
+There are no additional steps involved to detect packet loss. Whenever the daemon is running, it is automatically detecting packet loss. The results of the packet loss detection are sent to the syslog server specified in the configuration and also written to a file located at \code{/var/log/}.
+\todo{Jan: check if correct location}
 
