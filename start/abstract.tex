@@ -5,9 +5,11 @@
 
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
 
-Paket Verluste und Fragmentierungsprobleme treten bei VPN Verbindungen auf Grund falsch konfigurierten Netzwerkgeräten immer wieder auf. Als Betreiber von VPN Verbindungen bemerkt man diese Probleme oftmals erst wenn ein Kunde sich beschwert. Dieses Problem hat auch die Open Systems AG mit Sitz in Zürich. Sie betreibt ein weltweites Netzwerk von IPSec VPN Tunnels für ihre Kunden, die konstant verfügbar sein müssen. Daher werden sie auch rund um die Uhr von einem Mission Control Center aus überwacht.
+Paket Verluste und Fragmentierungsprobleme treten bei VPN Verbindungen aufgrund falsch konfigurierten Netzwerkgeräten immer wieder auf. Als Betreiber von VPN Verbindungen bemerkt man diese Probleme oftmals erst wenn ein Kunde sich beschwert.
+Zudem ist ein erkennen einer falsch gesetzten MTU oder Windowsize bei IpSec nur schwer zu erkennen. Dieses Problem hat auch die Open Systems AG mit Sitz in Zürich. Sie betreibt ein weltweites Netzwerk von IPSec VPN Tunnels für ihre Kunden, die konstant verfügbar sein müssen. Daher werden sie auch rund um die Uhr von einem Mission Control Center aus überwacht.
 
 Das Ziel dieses Projekts war es in Zusammenarbeit mit der Open Systems AG ein Tool zu entwickeln dass durch passives Capturen von IPSec ESP Paketen den Paketverlust messen und bei Überschreiten eines Grenzwerts melden kann. Zudem soll es periodisch die MTU (Maximum Transfer Unit) messen, sodass sich Fragmentierungsprobleme frühzeitig erkennen lassen.
 
-Als Ergebnis dieser Arbeit ist das IPSec Diagnose Tool entstanden. Es ist als Kommandozeilen Applikation konzipiert und bietet sowohl einen interaktiven als auch einen Daemon Modus. So kann es zum Erkennen von Fehlern bei einem spezifischen IPSec Tunnels verwendet werden oder aber im Daemon Mode auf Veränderungen aufmerksam machen.
+Als Ergebnis dieser Arbeit ist das IPSec Diagnose Tool entstanden. Es ist als Kommandozeilen Applikation konzipiert und bietet sowohl einen interaktiven als auch einen Daemon Modus. 
+Somit kann es zum frühzeitigen erkennen von Fehlern bei IPSec Tunnels eingesetzt werden. Durch die Periodische Überprüfung wird man sofort auf problematische Änderungen aufmerksam.
 Das IPSecDiagTool ist in der Programmiersprache Go geschrieben und verwendet libpcap als Library für das Capturen von Paketen. 
