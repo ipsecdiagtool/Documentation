@@ -1,21 +1,21 @@
 \chapter{Usermanual}
 \label{chap:Usermanual}
-The \tool is a diagnosis application for the continuous monitoring of \acs{IPSec} \acs{VPN} tunnels. It has two main features. Firstly it's capable of passively detecting packet loss occurring within the \acs{IPSec} tunnels. If the packet loss exceeds a specified threshold a Syslog warning is automatically dispatched. Secondly IPSecDiagTool can actively determine the exact \acs{MTU} within a tunnel. This is useful when you're dealing with badly configured routers that block regular \acs{ICMP} messages outside of the tunnel. The \tool is designed to run as a daemon/service, but for testing purposes it also has a interactive mode.
+The \entool{} is a diagnosis application for the continuous monitoring of \acs{IPSec} \acs{VPN} tunnels. It has two main features. Firstly it's capable of passively detecting packet loss occurring within the \acs{IPSec} tunnels. If the packet loss exceeds a specified threshold a Syslog warning is automatically dispatched. Secondly the \entool{} can actively determine the exact \acs{MTU} within a tunnel. This is useful when you're dealing with badly configured routers that block regular \acs{ICMP} messages outside of the tunnel. The \entool{} is designed to run as a daemon/service, but for testing purposes it also has a interactive mode.
 
 \section{Installation Guide}
-This chapter explains how to install the \tool.
+This chapter explains how to install the \entool{}.
 
 \subsection{System Requirements}
-The \tool is currently set up to run on Linux based systems and it requires a installation of the libpcap0.8-dev package. Depending on your local settings you may need to run the \tool as superuser (sudo) to be able to capture packets.
+The \entool{} is currently set up to run on Linux based systems and it requires a installation of the libpcap0.8-dev package. Depending on your local settings you may need to run the \entool{} as superuser (sudo) to be able to capture packets.
 
-Although the \tool has only been tested on Linux based systems you may be able to get it running on OS X or windows without or with very few changes to its source code. The application was designed with a broad compatibility in mind.
+Although the \entool{} has only been tested on Linux based systems you may be able to get it running on OS X or windows without or with very few changes to its source code. The application was designed with a broad compatibility in mind.
 
 While capturing 300mbit/s of packet-data the tool requires about 20\% CPU Usage on a modern Intel Xeon processor. So make sure to have enough spare processing power on your VPN routers.
 
 \todo{CPU and RAM performance impact requirements überprüfen / mit aktuellen Daten ergänzen.}
 
 \section{Installation}
-To install the \tool you need to run the following bash script. It will take care of setting up a tempoary go-environment and getting the proper dependencies. You can also get the latest version of the build-script from the Github-Repository (\url{https://github.com/ipsecdiagtool/ipsecdiagtool/blob/master/build.sh}).
+To install the \entool{} you need to run the following bash script. It will take care of setting up a tempoary go-environment and getting the proper dependencies. You can also get the latest version of the build-script from the Github-Repository (\url{https://github.com/ipsecdiagtool/ipsecdiagtool/blob/master/build.sh}).
 
 \lstset{language=bash, breaklines=true}
 \begin{lstlisting}
@@ -61,20 +61,19 @@ echo "Getting and building ipsecdiagtool"
 go get github.com/ipsecdiagtool/ipsecdiagtool
 \end{lstlisting}
 
-\todo{Make sure to update or use direct code-link !!}
 
 \section{Usage}
 
 \subsection{Commands}
-The following commands can be used to control the \tool.
+The following commands can be used to control the \entool{}.
 
 \begin{tabularx}{\textwidth}{l|l|>{\raggedright\arraybackslash}X} 
 \textbf{Command} & \textbf{Alternative} & \textbf{Explanation} \\
 \hline
-install &  & Install the \tool as a daemon.\\
-uninstall & remove & Removes the \tool daemon.\\
+install &  & Install the \entool{} as a daemon.\\
+uninstall & remove & Remove the \entool{}'s daemon.\\
 interactive & demo & Allows for interactive testing. Results are directly printed to the console. The daemon is not used. \\
 mtu-discovery & mtu & Tells the daemon to start finding the MTU for all configured tunnels. \\
-about & version & Displays general information about the \tool. \\
+about & version & Displays general information about the \entool{}. \\
 help & & A list of commands and how to use them.
 \end{tabularx}
