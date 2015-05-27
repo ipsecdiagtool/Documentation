@@ -175,3 +175,28 @@ The config is valid json and can be edited through a normal editor such as \enqu
     "CfgVers": 14
 }
 \end{lstlisting}
+
+The following list describes each configuration option in detail.
+
+\begin{enumerate}
+  \item \code{ApplicationID}: If set to 0 a random \code{ApplicationID} is generated on the program start. If it is set to a positive integer other then 0, this integer is used. The \code{ApplicationID} is used to identify the application that sent \acs{ICMP} packets for the \acs{MTU} discovery.
+  \item \code{Debug}: When set to \code{true} the \entool{} prints verbose log \& status messages to the console output or if run as daemon to the log file located at \code{/var/log/}. When set to \code{false} only a minimal amount of log messages are printed.
+  \item \code{SyslogServer}: The ip and port of the syslog server that is meant to receive packet loss and \acs{MTU} discovery messages. This option is configured in the format \code{"ip:port"}. For example: \code{"192.168.0.10:514"}.
+  \item \code{PcapSnapLen}: This option specifies the maximum packet length that can be captured. It can be set to a integer between 0 and 65535. This option can be used to simulate a \acs{MTU} when running the \acs{MTU} discovery via localhost.
+  \item \code{MTUConfList}: Contains a list of \code{MTUConf}'s. A \code{MTUConf} contains all necessary options to detect the \acs{MTU} of a single network connection or \acs{VPN} tunnel.
+  \begin{enumerate}
+	  \item \code{SourceIP}: The ip of the interface from which the \acs{MTU} discovery should be launched.
+	  \item \code{DestinationIP}: The ip of the endpoint between which the \acs{MTU} discovery should be executed.
+	  \item \code{Timeout}: The time, in seconds, that is waited before sending the next batch of packets.
+	  \item \code{MTURangeStart}: A positive integer (incl. 0) that is smaller then the smallest possible \acs{MTU}. The start \& end range are used to detect the \acs{MTU} faster. If you are uncertain, keep the value 0.
+	  \item \code{MTURangeEnd}: A positive integer that is larger then the largest possible \acs{MTU}. For example the \acs{MTU} of a normal, physical ethernet connection is 1500, so a good choice would be 2000. If you are using a different protocol than ethernet you may want to look up its maximal \acs{MTU} and put a value greater than that as \code{MTURangeEnd}.
+	  \item \code{ConcurrentPackets}: The maximal amount of packets that are sent out in one batch. More concurrent packets increase the speed in which the \acs{MTU} can be detected but they also cause more network traffic. A good value, that has been tested throughly is 20.
+  \end{enumerate}
+  \item \code{WindowSize}: \todo{Jan: add description.}
+  \item \code{InterfaceName}: The interface that is used to capture packets for the packet loss detection and \acs{MTU} discovery. Ideally this option is set to \code{any} in order to capture packets from all available interfaces. 
+  \item \code{AlertTime}:  \todo{Jan: add description.}
+  \item \code{AlertCounter}: \todo{Jan: add description.}
+  \item \code{PcapFile}: The location of a pcap file. This pcap file is used for the packet loss detection instead of real network traffic from a interface. If this is empty the real network interface is used.
+  \item \code{CfgVers}: There is never any need for you to manually change this value. The CfgVers is used to determine whether the current configuration needs to be updated automatically when a new configuration-option has been added to the application.
+\end{enumerate}
+
