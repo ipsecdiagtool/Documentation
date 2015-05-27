@@ -3,14 +3,16 @@
 
 \subsection{Aktoren \& Stakeholder}
 
-\begin{tabular}{|l|l|}
+\begin{table}
+\begin{tabularx}{\textwidth}{l|>{\raggedright\arraybackslash}X} 
+\textbf{Aktoren \& Stakeholder} & \textbf{Interessen} \\
 \hline
-\rowcolor[HTML]{C0C0C0} 
-\textbf{Aktoren \& Stakeholder} & \textbf{Interessen}                                                                                                                          \\ \hline
-Netzwerkadministrator      & \begin{tabular}[c]{@{}l@{}}Möchte einen IPSec Tunnel betreiben der einen möglichst\\ geringen Paket-Verlust aufweist.\end{tabular}           \\ \hline
-VPN Benutzer                    & Möchte eine schnelle, stabile Verbindung benutzen.                                                                                           \\ \hline
-System (IPSecDiagTool)          & \begin{tabular}[c]{@{}l@{}}Möchte den Administrator bei Problemen informieren\\ und stets die beste MTU vorschlagen können.\end{tabular} \\ \hline
-\end{tabular}
+Netzwerk Administrator & Möchte einen IPsec Tunnel betreiben der kein Paket Verlust hat und keine Fragmentierungsprobleme hat. Wen dass nicht möglich ist möchte er zumindest frühzeitig über solche Probleme informiert werden, so dass diese behoben werden können bevor ein Kunde eine Beschwerde einreichen muss. \\
+VPN Benutzer & Möchte eine schnelle und stabile \acs{VPN} Verbindung benutzen. Bei Problemen mit der Verbindung möchte er eine möglichst schnelle Lösung des Problems haben. \\
+System (\tool) & Soll den Netzwerk Administrator bei Paket Verlusten oder Fragmentierungsproblemen frühzeitig informieren können. \\
+\end{tabularx}
+\caption{Aktoren \& Stakeholder}
+\end{table}
 
 \subsection{UC1: Bestimmen von Paketverlusten}
 Der Paketverlust soll passiv, durch auslesen der ESP-Sequenznummern, vom \tool ermittelt werden. Der Paketverlust soll sowohl Prozentual als auch mit einer konkreten Zahl an verlorenen Paketen pro Zeiteinheit ausgewiesen werden. Die Zeiteinheit soll konfigurierbar sein.
