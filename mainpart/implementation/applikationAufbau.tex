@@ -6,7 +6,7 @@ Zur Entwicklung des \tool{}s wird wegen den im Kapitel Analyse erläuterten Grü
 
 Anstatt der Klasse als Struktur bietet Go sogenannte Packages an. Innerhalb eines Package können beliebig viele .go Files erstellt werden die dann den Source Code enthalten. Private Variablen und Funktionen sind innerhalb eines Package frei zugänglich, können aber ausserhalb des Package nicht aufgerufen werden.
 
-\begin{lstlisting}[language=bash, caption=Package Struktur des \tool]                    
+\begin{lstlisting}[language=bash, caption=Package Struktur des \tool{}]                    
 github.com/ipsecdigatool/ipsecdigatool/       
 	.git/
 	capture/ # Pakete von Netzwerkadapter capturen        
@@ -28,5 +28,11 @@ github.com/ipsecdigatool/ipsecdigatool/
 
 Die Packages \code{capture}, \code{config}, \code{logging} werden sowohl für die \acs{MTU} Discovery als auch für die Packet Loss Detection verwendet. Die Packages \code{mtu} und \code{packetloss} werden nur für die jeweiligen Funktionen gebraucht und sind unabhängig voneinander. Das \code{main.go} enthält allen Code der für den Programmstart sowie den Daemon Mode gebraucht wird.
 
+\subsection{Namenskonvention}
+Go unterscheidet öffentlichen und privaten Funktionen und Variablen durch die Grosse- oder Kleinschreibung des ersten Buchstaben eines Funktions- oder Variablennamen. Gross geschriebene Namen zeigen eine öffentliche Funktion oder Variable an, die dann auch ausserhalb des Package genutzt werden kann.
+In der Go Usergroup ist ausserdem auch die Idee verbreitet das Variablen- und Funktionsnamen möglichst kurz und prägnant sein sollen. CamelCase Namen sollen nach Möglichkeit vermieden werden. Dies kommt wohl einerseits von der C-Ähnlichkeit hat aber andererseits auch einen praktischen Grund. So ist ein Funktionsaufruf wie \code{capture.Start()} tatsächlich recht elegant und gut verständlich.
+Im Verlauf dieses Projekts haben wir auch festgestellt dass es besser ist alle Namen, Ordnernamen und Kommandos wenn möglich klein zu schreiben. Zu Beginn des Projekts haben wir \code{github.com/IPsecDiagTool/IPsecDiagTool} als Repository Ordner Struktur verwendet und dies hat zu einigen Konflikten geführt. Glücklicherweise lassen sich Repositories auf github.com relativ leicht umbenennen und wir konnten auf eine rein klein geschriebene Ordner Struktur umsteigen.
+
+\subsection{Programmstart}
 
 
