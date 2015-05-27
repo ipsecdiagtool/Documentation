@@ -46,9 +46,11 @@ Am Programmstart des \tool{} lässt sich das Zusammenspiel der verschiedenen Pac
 
 Beim Initialiserungs-Vorgang der jeweiligen Package werden die fürs Multi-Threading notwendigen Konstrukte erstellt. Bei Go wird Multi-Threading vor allem via Goroutinen und Channels realisiert. Eine Goroutine ist eine Funktion die im gleichen Address Space, gleichzeitig mit anderen Goroutinen ausgeführt wird. Goroutinen sind leichtgewichtig und kosten bei der Erstellung nicht mehr als Stack Space. Um Nebenläufigkeit zu erreichen werden Goroutinen auf mehrere Threads des Betriebsystems multiplexed. When eine Goroutine blockiert, können die anderen Goroutinen weiterlaufen \cite[:1391]{effective_go}.
 Zur Synchronisation und zum Datenaustausch zwischen Goroutinen werden sogenannte Channels verwendet. Typischerweise hat man in einer Goroutine eine for-Schleife und wartet darin auf Input aus einem Channel. Weitere, konkrete Beispiel werden im nächsten Abschnitt aufgezeigt.
-\todo{Programmstart fertig machen.}
 
+Nachdem Initialisieren werden die Goroutinen der \code{mtu} und \code{packetloss} Packages gestartet. Zu letzt wird die \code{capture} Goroutine gestartet. Ab jetzt werden die Pakete vom konfigurierten Interface gecaptured und vom \tool{} verarbeitet. Die Main Funktion ist jetzt nur noch dafür verantwortlich ein vom User gesendetes \code{SIGTERM} Signal abzufangen und gegebenenfalls das Programm zu beenden.
 
+\subsection{Multi Threading Konzepte}
 \todo{Abschnitt mit Goroutinen Code Beispielen.}
+\todo{Beispiel mit for{} und select, typischer optionaler quit channel.}
 
 
