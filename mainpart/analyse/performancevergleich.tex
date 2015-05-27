@@ -19,18 +19,15 @@ Via. jPerf wird nun soviel Traffic erzeugt um die 1Gbit/s-Leitung möglichst sta
 
 \subsection{Ergebnisse}
 Sowohl mit JNetPcap auf Java als auch mit goProbe auf Golang lassen sich mehr als 300mbit/s an Verkehr aufzeichnen. GoProbe ist mit den Durchschnittlich 16\% CPU Auslastung aber etwas performanter als JNetPcap. Die 31\% CPU Lastspitze beim Java Programm gibt es jeweils nur wenn das Programm zum ersten Mal gestartet wird und kommt daher dass dann zuerst eine \acs{JVM} hochgefahren werden muss.
-Beim Speicherverbrauch hat goProbe aber deutlich die Nase vorne. So wird tatsächlich nur ein Bruchteil des physischen Speichers (RES) gegenüber Java verwendet.
-
-%TODO: RES evtl. noch verlinken.
+Beim Speicherverbrauch hat goProbe aber deutlich die Nase vorne. So wird tatsächlich nur ein Bruchteil des physischen Speichers (RES\footnotemark[2]) gegenüber Java verwendet.
 
 \begin{table}[h]
-\begin{tabular}{|l|l|l|l|l|l|l|}
-\hline
-\rowcolor[HTML]{C0C0C0} 
+\begin{tabular}{l|l|l|l|l|l|l}
 \textbf{Software} & \textbf{CPU Top} & \textbf{CPU Ø} & \textbf{Mem Ø} & \textbf{VIRT\footnotemark[1]} & \textbf{RES\footnotemark[2]} & \textbf{SHR\footnotemark[3]} \\ \hline
 JNetPcap          & 31\%             & 20\%           & 0.9\%          & 7030296kb       & 147840kb       & 19588kb        \\ \hline
-goProbe           & 18\%             & 16\%           & 0.3\%          & 315268kb        & 1964kb         & 1676kb         \\ \hline
+goProbe           & 18\%             & 16\%           & 0.3\%          & 315268kb        & 1964kb         & 1676kb         \\
 \end{tabular}
+\caption{Performance Vergleich: jNetPcap vs. goProbe}
 \end{table}
 
 \footnotetext[1]{VIRT steht für die virtuelle Grösse eines Prozesses.}
