@@ -1,0 +1,32 @@
+\section{Aufbau der Applikation}
+\label{sec:Aufbau der Applikation}
+
+\subsection{Einleitung}
+Zur Entwicklung des \tool{}s wird wegen den im Kapitel Analyse erläuterten Gründen die Programmiersprache Go eingesetzt. Go erlaubt zwar einen Objekt-Orientierten Stil des Programmieren \cite[:240]{golang_faq}, bietet aber im Vergleich zu typisch \acs{OOP} Sprachen wie Java oder C++ keine Klassen \& Typen Hierarchien.
+
+Anstatt der Klasse als Struktur bietet Go sogenannte Packages an. Innerhalb eines Package können beliebig viele .go Files erstellt werden die dann den Source Code enthalten. Private Variablen und Funktionen sind innerhalb eines Package frei zugänglich, können aber ausserhalb des Package nicht aufgerufen werden.
+
+\begin{lstlisting}[language=bash, caption=Package Struktur des \tool]                    
+github.com/ipsecdigatool/ipsecdigatool/       
+	.git/
+	capture/ # Pakete von Netzwerkadapter capturen        
+		capture.go
+	config/ # Konfiguration erstellen, laden, aktualisieren
+		config.go
+	logging/ # Syslog Nachrichten absetzen
+		logging.go
+	mtu/ # MTU Discovery durchfuehren
+		analyze.go
+		capture.go
+		send.go
+	packetloss/ # Packet loss feststellen
+		detect.go
+		espmap.go
+		lostfile.go
+	main.go # Programmstart und Daemon Funktionalitaet
+\end{lstlisting}
+
+Die Packages \code{capture}, \code{config}, \code{logging} werden sowohl für die \acs{MTU} Discovery als auch für die Packet Loss Detection verwendet. Die Packages \code{mtu} und \code{packetloss} werden nur für die jeweiligen Funktionen gebraucht und sind unabhängig voneinander. Das \code{main.go} enthält allen Code der für den Programmstart sowie den Daemon Mode gebraucht wird.
+
+
+
