@@ -5,10 +5,10 @@
 
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
 
-Paket Verluste und Fragmentierungsprobleme treten bei VPN Verbindungen aufgrund falsch konfigurierten Netzwerkgeräten immer wieder auf. Als Betreiber von VPN Verbindungen bemerkt man diese Probleme oftmals erst wenn ein Kunde sich beschwert. Zudem ist die Suche nach einer falsch gesetzten MTU oder das Erkennen einer zu kleinen Window Size bei IPsec schwierig.
+Paket Verluste und Fragmentierungsprobleme treten bei VPN Verbindungen aufgrund falsch konfigurierten Netzwerkgeräten immer wieder auf. Als Betreiber von VPN Verbindungen bemerkt man diese Probleme oftmals erst wenn ein Kunde sich beschwert. Zudem ist die Suche nach der Ursache mühsam und es dauert lange bis die falsche Konfiguration identifiziert werden kann.
 Dieses Problem hat auch die Open Systems AG mit Sitz in Zürich. Sie betreibt ein weltweites Netzwerk von IPsec VPN Tunnels für ihre Kunden, die konstant verfügbar sein müssen. Daher werden sie auch rund um die Uhr von einem Mission Control Center aus überwacht.
 
-Das Ziel dieses Projekts war es in Zusammenarbeit mit der Open Systems AG ein Tool zu entwickeln dass durch passives Capturen von IPsec ESP Paketen den Paketverlust messen und bei Überschreiten eines Grenzwerts melden kann. Zudem soll es periodisch die MTU (Maximum Transfer Unit) messen, sodass sich Fragmentierungsprobleme frühzeitig erkennen lassen.
+Das Ziel dieses Projekts war es in Zusammenarbeit mit der Open Systems AG ein eigenständiges Tool zu entwickeln, dass durch passives aufzeichnen von Paketen fähig ist, bei einer VPN Verbindung, einen Paketverlust festzustellen.
+Zudem soll es möglich sein, die Maximum Transfer Unit (MTU) periodisch zu bestimmen, wodurch Fragmentierungsprobleme frühzeitig festgestellt werden können.
 
-Als Ergebnis dieser Arbeit ist das IPsec Diagnose Tool entstanden. Es ist als Kommandozeilen Applikation konzipiert und bietet sowohl einen interaktiven als auch einen Daemon Modus. Im interaktiven Modus kann man aktiv nach Problemen bei einer bestimmten Verbindung suchen. Mithilfe des Daemon Modus kann man alle bestehenden Verbindungen überwachen und wird so frühzeitig auf problematische Veränderungen aufmerksam.
-Das IPsecDiagTool ist in der Programmiersprache Go geschrieben und verwendet libpcap als Library für das Capturen von Paketen. 
+Als Ergebnis dieser Arbeit ist das IPsec Diagnose Tool entstanden welches in der Programmiersprache GO geschrieben wurde. Es ist als leichtgewichtige, konfigurierbare und einfach zu bedienende Kommandozeilen Applikation konzipiert. Das Diagnose Tool ist in der Lage, VPN Tunnel zu überwachen und bei Problemen mit einer Verbindung eine Benachrichtigung zu senden. Im rahmen der Arbeit konnte das Tool zudem schon erfolgreich bei der Open Systems AG getestet werden. 
