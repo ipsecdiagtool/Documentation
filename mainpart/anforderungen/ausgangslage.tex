@@ -8,7 +8,12 @@
   \end{center}
 \end{wrapfigure}
 
-Die Firma \osag betreibt ein weltweites Netz von \acs{IPsec} \acs{VPN} Verbindungen. Die Kunden der \osag kommen unter anderem aus den Branchen: Finanzen, Versicherungen, Regierung sowie Detail Handel. Daher ist es für \osag sehr wichtig, dass die Verbindungen konstant überwacht werden. Zu diesem Zweck wird auch ein Mission Control Center betrieben dass den Betrieb der \acs{VPN} Tunnels 24/7 überwacht. Dieses Mission Control Center\footnotemark[1] ist zuständig, dass periodische Tests der Verbindungsqualität gemacht werden sowie akute Probleme direkt erkannt und behoben werden. Das manuelle Überprüfen von Paket-Verlusten und bestimmen von Fragmentierungsproblem nimmt viel Zeit in Anspruch. Es soll nun eine Applikation programmiert werden, womit sich diese Arbeit automatisieren lässt, sodass mit weniger Aufwand eine bessere Verbindungsqualität gewährleistet werden kann.
+Die Firma \osag betreibt ein weltweites Netz von \acs{IPsec} \acs{VPN} Verbindungen. Die Kunden der \osag kommen unter anderem aus den Branchen: Finanzen, Versicherungen, Regierung, Detail Handel und weiteren. Daher ist es für \osag sehr wichtig, dass die Verbindungen konstant überwacht werden. Zu diesem Zweck betreibt die \osag auch zwei Mission Control Center\footnotemark[1] mit den Standorten Zürich und Sydney. So ist ein \enquote{Follow-the-Sun} 24/7 Betrieb möglich.
+
+Die Aufgabe dieser Mission Control Center ist es die \acs{VPN}-Verbindungen konstant zu überwachen und auf Kunden Probleme zu reagieren. Anders als bei Firmen mit typischem First-, Second- und Third-Level Support sind die Mission Control Center stets von Ingenieuren besetzt, die sich Kundenproblem so direkt annehmen können und auch komplexe Probleme in kürzester Zeit lösen. Probleme, die vermehrt auftreten werden, dort auch gleich mit einer automatisierten Lösung versehen, sodass sie beim erneuten Auftreten nicht durch einen Menschen bearbeitet werden müssen.
+
+Im Sinne dieser Automatisierungs-Bestrebung soll mit dieser Arbeit auch das Detektieren von Paket-Verlusten und die Bestimmung der MTU gelöst werden.
+Das manuelle Überprüfen von Paket-Verlusten und bestimmen von Fragmentierungsproblem nimmt viel Zeit in Anspruch. Es soll nun eine Applikation programmiert werden, womit sich diese Arbeit automatisieren lässt, sodass mit weniger Aufwand eine bessere Verbindungsqualität gewährleistet werden kann.
 
 \footnotetext[1]{Bild: \url{http://open.ch}}
 
