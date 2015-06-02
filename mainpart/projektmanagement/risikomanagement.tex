@@ -1,11 +1,11 @@
 \section{Risikomanagment}
 \label{sec:Risikomanagment}
 
-\subsection{Projektspezifisch}
+\subsection{Projektspezifische Risiken}
 
 \begin{table}[H]
 \begin{tabularx}{\textwidth}{l|>{\raggedright\arraybackslash}X}
-\multicolumn{2}{l}{\textbf{R1: Performance der \ac{PCAP}-Library reicht nicht aus.}} \\
+\multicolumn{2}{l}{\textbf{R1: Performance der \ac{PCAP}-Library reicht nicht aus}} \\
 \hline
 Beschreibung & Die \ac{PCAP}-Library ist nicht genügend performant um alle Pakete aufzuzeichnen, es kommt zu Paket-Verlusten die nichts mit der Verbindung zu tun haben. \\
 \hline
@@ -16,8 +16,31 @@ Vorgehen beim Eintreffen & Eine andere \ac{PCAP}-Library wählen.\\
 \caption{Risiko - Performance der \ac{PCAP}-Library reicht nicht}
 \end{table}
 
-\subsection{Allgemeine}
-todo
+\begin{table}[H]
+\begin{tabularx}{\textwidth}{l|>{\raggedright\arraybackslash}X}
+\multicolumn{2}{l}{\textbf{R2: Programmiersprache ist schwer zu erlernen}} \\
+\hline
+Beschreibung & Die für das Projekt gewählte Programmiersprache ist schwer zu erlernen. Oder es sind nicht genügend Mittel (Tutorials, Anleitungen) vorhanden um die Programmiersprache in nützlicher Frist und nicht nach dem \enquote{Trial \& Error}-Verfahren zu erlernen.\\
+\hline
+Massnahme & Zu Beginn des Projekts möglichst Früh einen Prototyp des Tools entwickeln um so ein Gefühl für die generelle Machbarkeit des Projekts zu erhalten.\\
+\hline
+Vorgehen beim Eintreffen & Da in so einem Fall das Projekt bereits voll im Gange ist, kommen nur noch Programmiersprachen in Frage von denen bereits gute Kenntnisse vorhanden sind. Konkret kämen bei uns Java oder C\# in Frage.\\
+\end{tabularx}
+\caption{Risiko - Programmiersprache zu schwer zu erlernen}
+\end{table}
+
+\begin{table}[H]
+\begin{tabularx}{\textwidth}{l|>{\raggedright\arraybackslash}X}
+\multicolumn{2}{l}{\textbf{R3: Ungenügende oder inkorrekte Informationen vom Industriepartner}} \\
+\hline
+Beschreibung & Die vom Industriepartner zur Verfügung gestellten Informationen bezüglich der Beschaffenheit ihrer Infrastruktur stellen sich als ungenügend genau oder inkorrekt heraus.\\
+\hline
+Massnahme & Sitzungsprotokoll führen um so etwas in der Hand zu haben falls dieser Fall eintritt. \\
+\hline
+Vorgehen beim Eintreffen & Anhand des Sitzungsprotokoll nachvollziehen was genau gesagt wurde.\\
+\end{tabularx}
+\caption{Risiko - Ungenügende oder inkorrekte Informationen}
+\end{table}
 
 \subsection{Risikoschätzung}
 todo
