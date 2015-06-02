@@ -7,30 +7,32 @@
 \begin{tabularx}{\textwidth}{l|>{\raggedright\arraybackslash}X} 
 \textbf{Aktoren \& Stakeholder} & \textbf{Interessen} \\
 \hline
-Netzwerk Administrator & Möchte einen IPsec Tunnel betreiben der kein Paket Verlust hat und keine Fragmentierungsprobleme hat. Wen dass nicht möglich ist möchte er zumindest frühzeitig über solche Probleme informiert werden, so dass diese behoben werden können bevor ein Kunde eine Beschwerde einreichen muss. \\
-VPN Benutzer & Möchte eine schnelle und stabile \ac{VPN} Verbindung benutzen. Bei Problemen mit der Verbindung möchte er eine möglichst schnelle Lösung des Problems haben. \\
-System (\tool) & Soll den Netzwerk Administrator bei Paket Verlusten oder Fragmentierungsproblemen frühzeitig informieren können. \\
+Netzwerk Administrator & Möchte einen \ac{IPsec} Tunnel betreiben der kein Paket Verlust hat und keine Fragmentierungsprobleme hat. Wen dass nicht möglich ist möchte er zumindest frühzeitig über solche Probleme informiert werden, so dass diese behoben werden können bevor ein Kunde eine Beschwerde einreichen muss. \\
+System (\tool{}) & Soll den Netzwerk Administrator bei Paket Verlusten oder Fragmentierungsproblemen frühzeitig informieren können. \\
 \end{tabularx}
 \caption{Aktoren \& Stakeholder}
 \end{table}
 
 \subsection{UC1: Bestimmen von Paketverlusten}
-Das \tool soll in der Lage sein passiv den Paket-Verlust zu ermitteln. Der ermittelte Paket-Verlust soll sowohl Prozentual als auch mit einer konkreten Zahl an verlorenen Paketen pro Zeiteinheit ausgewiesen werden. Die Zeit, in der der prozentuale Paket-Verlust bestimmt wird, soll konfigurierbar sein.
+Der User soll in der Lage sein mit dem \tool{} passiv den Paket-Verlust zu ermitteln. Der ermittelte Paket-Verlust soll sowohl Prozentual als auch mit einer konkreten Zahl an verlorenen Paketen pro Zeiteinheit ausgewiesen werden. Die Zeit, in der der prozentuale Paket-Verlust bestimmt wird, soll durch den User konfigurierbar sein.
 
 \subsection{UC1.1: Auslösen von Alerts bei überschrittenem Grenzwert}
-Wenn ein bestimmter Grenzwert beim Überprüfen von Paket-Verlusten  überschritten wird, soll eine Warnung ausgelöst werden. Diese Warnung soll sowohl an einen zentralen Server übermittelt als auch lokal in einem in einem Log-File gespeichert werden. Der Grenzwert soll konfigurierbar sein.
+Wenn ein bestimmter Grenzwert beim Überprüfen von Paket-Verlusten überschritten wird, soll eine Warnung ausgelöst werden. Diese Warnung soll sowohl an einen zentralen Server übermittelt als auch lokal in einem in einem Log-File gespeichert werden. Der Grenzwert soll konfigurierbar sein.
 
-\subsection{UC2: Bestimmen der MTU}
-Die \ac{MTU} Bestimmung soll aktiv innerhalb des Tunnels zwischen zwei Routern durchgeführt werden können. Es soll die Möglichkeit bestehen mehrere solche Verbindungen zu konfigurieren. Wenn mehrere Verbindungen konfiguriert sind soll die \ac{MTU} Bestimmung parallel durchgeführt werden. 
+\subsection{UC2: MTU Bestimmung}
+Ein User des \tool{}s soll die Möglichkeit haben die \ac{MTU} innerhalb eines Tunnels zwischen zwei Routern zu bestimmen.
 
-\subsection{UC2.1: Periodische Bestimmung der idealen MTU}
-Die \ac{MTU} Bestimmung soll periodisch durchgeführt werden können. Dazu soll der \ac{MTU}-Bestimmungsvorgang bei einem als Service laufenden \tool{} gestartet werden können.
+\subsection{UC2.1: MTU Bestimmung für mehrere Tunnels}
+Wenn auf einem Router mehrere Tunnels installiert sind soll der User die Möglichkeit haben alle diese Tunnels im \tool{} zu konfigurieren. Die \ac{MTU} Bestimmung soll dann auch für jeden Tunnel gleichzeitig durchgeführt werden so dass der User nicht unverhältnismässig lange auf ein Resultat warten muss.
+
+\subsection{UC2.2: Periodische Bestimmung der MTU}
+Die \ac{MTU} Bestimmunsoll programmatisch, periodisch durchgeführt werden können.
 
 \subsection{UC3: Permanente Ausführung als Service}
-Das \tool{} soll als Service permanent auf einem Router laufen können. Dieser Service soll sich starten \& beenden lassen.
+Das \tool{} soll vom User als Service, der permanent auf einem Router läuft, gestartet werden können.
 
 \subsection{UC4: Konfiguration}
-Beim ersten Start des \tool{}s soll automatisch ein Konfigurationsfile erstellt werden. In diesem File werden die für die \ac{MTU} Bestimmung und das Detektieren von Paket Verlusten notwendigen Einstellungen gespeichert. Bei der automatischen Erstellung sollen sinnvolle Demo-Werte gesetzt werden die eine Demonstration des \tool{}s erlauben.
+Beim ersten Start des \tool{}s soll automatisch ein Konfigurationsfile erstellt werden. In diesem File sollen die für die \ac{MTU} Bestimmung und das Detektieren von Paket Verlusten notwendigen Einstellungen gespeichert werden. Bei der automatischen Erstellung sollen sinnvolle Werte gesetzt werden die eine Demonstration des \tool{}s erlauben.
 
 \subsection{Optional UC5: Passiv die IKE Header untersuchen}
-Das \tool bietet die Möglichkeit passiv die \ac{IKE} Header zu untersuchen und dabei Probleme festzustellen. Dieser Use Case wird nur bearbeitet wenn alle anderen Use Cases erfüllt sind. In so einem Fall müsste der UC5 noch genauer spezifiziert werden.
+Das \tool{} soll die Möglichkeit bieten passiv die \ac{IKE} Header zu untersuchen und dabei Probleme festzustellen. Dieser Use Case wird nur bearbeitet wenn alle anderen Use Cases erfüllt sind. In so einem Fall müsste der UC5 noch genauer spezifiziert werden.
