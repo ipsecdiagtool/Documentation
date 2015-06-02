@@ -3,40 +3,40 @@
 
 \subsection{Angemessenheit}
 \begin{itemize}
-	\item Es sollen möglichst alle der genannten Anforderungen erfüllt werden.
-	\item Die Applikation soll schlank und in einem einheitlichen Stil programmiert werden. Zudem sollen die Vorschriften der Codeformatierung von Go übernommen werden. Dadurch wird eine höhere Übersichtlichkeit und leichtere Einarbeitung in den Code gewährleistet.
+\item Es sollen alle der genannten Muss \& Soll Kriterien erfüllt werden.
+\item Alle in den Use Cases beschriebenen Anwendungsfälle sollen durch den User des \tool{}s ausgeführt werden können.
+\item Die Applikation soll schlank und in einem einheitlichen Stil programmiert werden. Zudem sollen die Vorschriften der Codeformatierung von Go übernommen werden. Dadurch wird eine höhere Übersichtlichkeit und leichtere Einarbeitung in den Code gewährleistet.
 \end{itemize}
 
 \subsubsection{Funktionalität}
 \begin{itemize}
-\item Das Window für die Gültigkeit von ESP Paketen ist konfigurierbar. Die Konfiguration führt zu einer individuelleren Erkennung von Paketverlusten. So kann auch bestimmt werden ab welcher Abweichung verspätetes Paket als verloren angesehen wird.
-\item Das Diagnose Tool funktioniert mindestens bis zu einer Datenrate von 300Mbit/s. Wobei dieser Wert nur bis zu einer bestimmten Mindestgrösse von Paketen gewährleistet werden kann.
-\item Für die Überprüfung der \acs{MTU} fungiert eine Seite als Client und die andere als Server, wobei die gleiche Software verwendet werden kann. Dadurch wird die Einrichtung der Überprüfung erleichtert, da nicht darauf geachtet werden muss welcher Softwareteil eingesetzt werden muss.
+\item Das Window für die Gültigkeit von \ac{ESP} Paketen ist konfigurierbar. Die Konfiguration führt zu einer individuelleren Erkennung von Paketverlusten. So kann auch bestimmt werden ab welcher Abweichung verspätetes Paket als verloren angesehen wird.
+\item Das Diagnose Tool funktioniert mindestens bis zu einer Datenrate von 300Mbit/s.
 \item Es ist konfigurierbar welches Netzwerkinterface bei der Überwachung verwendet werden soll.
 \end{itemize}
 
 \subsubsection{Testbarkeit}
 \begin{itemize}
-\item Die Businesslogik muss über alle Use Cases (Normal verhalten) mit automatischen Unit-Tests abgedeckt sein.
-\item Für die Test soll das "testing" Package von Go verwendet werden. Dies bietet die Vorteile einer automatisierten Ausführung und leichten Überprüfung von Testresultaten.
+\item Die Businesslogik soll über alle Use Cases (Normal Verhalten) mit automatischen Unit-Tests abgedeckt sein.
+\item Für die Unit Tests soll die "testing" Package von Go verwendet werden. Mithilfe dieser Package lassen sich Unit Tests schreiben die automatisch ausgeführt werden und so bei jeder Änderung Feedback zur Integrität der Applikation geben.
 \end{itemize}
 
 \subsubsection{Fehlertoleranz}
 \begin{itemize}
-\item Die Installation des Tools kann automatisch überprüft werden.
 \item Das System muss auch nach einem Neustart in einem definierten Zustand sein. Dies auch bei einem unvorhergesehenen Abbruch des Programms. 
 \item Um eine Fehlerhafte Ausführung und damit verbundene Schäden zu vermeiden, wird vor dem Start überprüft ob die eingestellte Konfiguration gültig ist.
 \end{itemize}
 
 \subsubsection{Änderbarkeit}
 \begin{itemize}
-\item Daten und Reports werden in einem Standard gespeichert, welcher auch von anderen Systemen gelesen werden kann (CSV, XML).
+\item Konfiguration, Daten und Reports werden in einem Standard gespeichert, welcher auch von anderen Systemen gelesen werden kann (z.B. CSV, XML, JSON).
 \item Der Code inklusive Kommentar sind auf Englisch um eine leichtere Anpassbarkeit zu erreichen.
 \end{itemize}
 
 \subsubsection{Anforderungen an Umgebung}
 \begin{itemize}
-\item Das Tool ist unter dem Betriebssystem Linux lauffähig, es werden jedoch root Rechte benötigt.
-\item Für die Umgebung braucht es die \acs{PCAP} Library sowie die Go Programming Language.
-\item Das Tool soll Open-Source sein und der Quellcode daher für jeden zugänglich und anpassbar.
+\item Das Tool ist unter dem Betriebssystem Linux lauffähig, es werden jedoch Root-Rechte benötigt.
+\item Für die Ausführung des \tool{}s ist eine Installation der \ac{PCAP}-Library libpcap notwendig.
+\item Für das Kompilieren des \tool{}s ist eine Go-Entwicklungsumgebung notwendig.
+\item Das \tool{} ist Open Source und der Quellcode wird frei verfügbar unter der MTI Lizenz veröffentlicht.
 \end{itemize}
