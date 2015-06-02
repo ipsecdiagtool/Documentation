@@ -3,31 +3,19 @@
 
 \subsection{Projektspezifisch}
 
-\begin{table}[h]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|l|}
+\begin{table}[H]
+\begin{tabularx}{\textwidth}{l|>{\raggedright\arraybackslash}X}
+\multicolumn{2}{l}{\textbf{R1: Performance der \ac{PCAP}-Library reicht nicht aus.}} \\
 \hline
-\multicolumn{2}{|l|}{\cellcolor[HTML]{C0C0C0}\textbf{R1: Performance der PCAP Library reicht nicht}}                                                                                                                              \\ \hline
-Beschreibung             & \begin{tabular}[c]{@{}l@{}}Die PCAP Library ist nicht genügend performant um alle Pakete aufzuzeichnen,\\ es kommt zu Paket-Verlusten die nichts mit der Verbindung zu tun haben.\end{tabular}         \\ \hline
-Massnahme                & \begin{tabular}[c]{@{}l@{}}Wir führen bereits vor der definitiven Wahl der Library Performance Tests durch\\ und können so feststellen ob sie unseren Ansprüchen (300mbit/s peak) genügt.\end{tabular} \\ \hline
-Vorgehen beim Eintreffen & Eine andere PCAP Library wählen.                                                                                                                                                                       \\ \hline
-\end{tabular}
-}
+Beschreibung & Die \ac{PCAP}-Library ist nicht genügend performant um alle Pakete aufzuzeichnen, es kommt zu Paket-Verlusten die nichts mit der Verbindung zu tun haben. \\
+\hline
+Massnahme & Wir führen bereits vor der definitiven Wahl der Library Performance Tests durch und können so feststellen ob sie unseren Ansprüchen (300mbit/s peak) genügt. \\
+\hline
+Vorgehen beim Eintreffen & Eine andere \ac{PCAP}-Library wählen.\\
+\end{tabularx}
+\caption{Risiko - Performance der \ac{PCAP}-Library reicht nicht}
 \end{table}
 
-\begin{table}[h]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|l|}
-\hline
-\multicolumn{2}{|l|}{\cellcolor[HTML]{C0C0C0}\textbf{R2: Java kann nicht verwendet werden}}                                                                                                                                                          \\ \hline
-Beschreibung             & \begin{tabular}[c]{@{}l@{}}Die gewählt Programmiersprache ist nicht genügend performant, siehe Risiko 1,\\ oder sie darf aus sonstigen Gründen nicht verwendet werden.\end{tabular}                                       \\ \hline
-Massnahme                & \begin{tabular}[c]{@{}l@{}}Die Wahl der Programmiersprache wird mit dem Kunden möglichst früh besprochen. \\ Mögliche Performance-Probleme werden wie bei Risiko 1 durch einen Performance\\ Test abgeklärt.\end{tabular} \\ \hline
-Vorgehen beim Eintreffen & Eine andere Programmiersprache und eine andere PCAP Library/Wrapper wählen.                                                                                                                                               \\ \hline
-\end{tabular}
-}
-\end{table}
 \subsection{Allgemeine}
 todo
 
