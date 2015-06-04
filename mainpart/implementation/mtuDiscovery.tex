@@ -1,0 +1,16 @@
+\section{MTU Discovery}
+\label{sec:MTU Discovery}
+
+\todo{Intro}
+
+\todo{Beschreiben wie programmiert in Code}
+
+Alle vom \tool{} verschickten \acs{ICMP} Pakete haben jeweils die folgende Payload:
+
+\begin{itemize}
+  \item \textbf{AppID:} Eindeutige ID des aktiven \tool{}. Wird verwendet um mehrere gleichzeitig laufende \tool{} auf einem Rechner zu unterscheiden. Die AppID wird entweder in der Konfiguration fix festgelegt oder auf 0 gesetzt. Wenn die AppID in der Konfiguration auf 0 gesetzt wurde dann wird beim Programmstart eine zufällige AppID generiert.
+  \item \textbf{ChannelID:} ID des GO-Channels von dem das Paket versendet wurde. Wird benötigt um für mehrere Tunnels gleichzeitig die \acs{MTU} festzustellen zu können. Die ChannelID wird jeweils beim Start eines \acs{MTU} Discovery Vorgangs zugeteilt.
+  \item \textbf{Command:} Die eigentliche Nachricht des Pakets. Wird verwendet um sicherzustellen dass dieses \acs{ICMP} Paket wirklich von einem \tool{} versendet wurde und nicht ein sonstiges \acs{ICMP} Paket.
+  \item \textbf{Null-Array:} Ein mit Nullen gefülltes Array von variabler Grösse. Wird verwendet um dem Paket seine vorbestimmte Grösse zu geben.
+\end{itemize}
+
