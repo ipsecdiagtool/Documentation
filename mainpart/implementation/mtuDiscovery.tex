@@ -1,15 +1,7 @@
 \section{MTU Discovery}
 \label{sec:MTU Discovery}
 
-\subsection{Einleitung}
-Mithilfe der \acs{MTU} (Maximum Transmission Unit) wird festgelegt wie gross ein Netzwerkpaket maximal sein darf, so dass es nicht in mehrere Pakete aufgeteilt werden muss. Wenn die \acs{MTU} korrekt bestimmt wurde dann wird Paket-Fragmentierung verhindert und die Performance der Netzwerkverbindung ist deutlich besser. 
-
-\subsection{Path MTU Discovery}
-Normalerweise wird die \acs{MTU} automatisch via \acs{PMTUD} (Path MTU Discovery) ermittelt. Dabei werden \acs{ICMP} Pakete unterschiedlicher Grösse die mit einem \enquote{Don't fragment} Flag versehen sind über die Verbindung gesandt. Wenn ein solches Paket auf ein Netzwerkgerät trifft dass eine kleinere \acs{MTU} konfiguriert hat als die Paketgrösse wird das Paket nicht weitergesendet, stattdessen wird ein \acs{ICMP} Paket mit dem Inhalt "Fragmentation needed" retourniert. So weiss der \acs{PMTUD} Algorithmus dass die \acs{MTU} der Verbindung überschritten wurde \cite[:131]{rfc1191}.
-
-\acs{PMTUD} hat jedoch ein Problem. Router die, die \acs{ICMP} Pakete weiterleiten oder aber ein \enquote{Fragmentation needed} Paket zurücksenden sollten tun dies nicht immer. Dieses Fehlverhalten gibt es aus mehreren Gründen. Zum einen wegen Kernel-Bugs, Fehlkonfigurationen und zum anderen auch weil Firewalls manchmal so konfiguriert werden dass sie \acs{ICMP} Nachrichten nicht durchlassen auf Grund von Sicherheitsbedenken \cite[:137]{rfc2923}.
-
-Da man sich also nicht auf \acs{PMTUD} verlassen kann um die \acs{MTU} einer Verbindung festzustellen wird mit dieser Arbeit eine \acs{MTU} Discovery implementiert die innerhalb einer \acs{IPSec} \acs{VPN} Verbindung durchgeführt werden kann.
+\todo{Intro}
 
 \subsection{MTU Discovery innerhalb des Tunnels}
 Um die im vorherigen Kapitel erwähnten Probleme von \acs{PMTUD} zu vermeiden wird die \acs{MTU} vom im \tool{} implementierten Algorithmus innerhalb des \acs{VPN} Tunnels festgestellt.
