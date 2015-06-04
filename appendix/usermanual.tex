@@ -1,6 +1,6 @@
 \chapter{Usermanual}
 \label{chap:Usermanual}
-The \entool{} is a diagnosis application for the continuous monitoring of \acs{IPSec} \acs{VPN} tunnels. It has two main features. Firstly it's capable of passively detecting packet loss occurring within the \acs{IPSec} tunnels. If the packet loss exceeds a specified threshold a Syslog warning is automatically dispatched. Secondly the \entool{} can actively determine the exact \acs{MTU} within a tunnel. This is useful when you're dealing with badly configured routers that block regular \acs{ICMP} messages outside of the tunnel. The \entool{} is designed to run as a daemon/service, but for testing purposes it also has a interactive mode.
+The \entool{} is a diagnosis application for the continuous monitoring of \acs{IPsec} \acs{VPN} tunnels. It has two main features. Firstly it's capable of passively detecting packet loss occurring within the \acs{IPsec} tunnels. If the packet loss exceeds a specified threshold a Syslog warning is automatically dispatched. Secondly the \entool{} can actively determine the exact \acs{MTU} within a tunnel. This is useful when you're dealing with badly configured routers that block regular \acs{ICMP} messages outside of the tunnel. The \entool{} is designed to run as a daemon/service, but for testing purposes it also has a interactive mode.
 
 \section{Installation Guide}
 This chapter explains how to compile \& install the \entool{}.
@@ -21,10 +21,10 @@ To install the \entool{} you need to run the following bash script. It will take
 \begin{lstlisting}
 #!/usr/bin/env bash
 # Title:  build.sh                                       
-# URL:    https://github.com/IPSecDiagTool/IPSecDiagTool
+# URL:    https://github.com/ipsecDiagTool/ipsecDiagTool
 # Author: Jan Balmer, Theo Winter
 #    
-# This script can be used to build IPSecDiagTool in a
+# This script can be used to build IPsecDiagTool in a
 # Linux environment. Tested on Ubuntu 14.04.1 LTS.
 #
 # Dependencies:
@@ -57,7 +57,7 @@ cd workspace
 echo "Downloading dependencies"
 sudo apt-get install libpcap0.8-dev
 
-echo "Getting and building ipsecdiagtool"
+echo "Getting and building IPsecDiagTool"
 go get github.com/ipsecdiagtool/ipsecdiagtool
 \end{lstlisting}
 
