@@ -1,7 +1,7 @@
 \section{MTU Discovery}
 \label{sec:MTU Discovery}
 
-Die \ac{MTU} Discovery wurde in der \code{mtu} Package implementiert. Darin enthalten sind \code{analyze.go}, \code{capture.go} und \code{send.go} sowie die dazugehörigen Unit Tests.
+Die \ac{MTU} Discovery ist in der \code{mtu} Package implementiert. Darin enthalten sind \code{analyze.go}, \code{capture.go} und \code{send.go} sowie die dazugehörigen Unit Tests.
 
 \subsection{Öffentliche Funktionen}
 Die \code{mtu} Package bietet die folgenden öffentlichen Funktionen:
@@ -15,7 +15,7 @@ Diese Funktion wird zur Initialisierung der \code{mtu} Package verwendet. Die Pa
 Die Funktion \code{RequestDaemonMTU(..)} sendet ein ICMP Request an die übergebene Destionation IP mit dem Kommando einen \ac{MTU} Discovery Vorgang zu starten. Die Funktion erwartet die AppID, Source- und Destination Adresse.
 \end{itemize}
 
-\subsection{FastMTU Algorithmus - Start Vorgang}
+\subsection{FastMTU Algorithmus}
 Der FastMTU Algorithmus ist in \code{analyze.go} implementiert. Bevor der \ac{MTU} Discovery Vorgang gestartet werden kann muss die \code{mtu} Package via der \code{mtu.init(..)} Funktion initialisiert werden. Bei der Initialisierung wird Konfiguration übergeben sowie ein Go-Channel der abgefangene \ac{ICMP} Pakete liefert (ICMP-Channel). Ausserdem wird die Funktion \code{mtu.handlePackets(..)} in einer Goroutine gestartet. Diese Funktion behandelt die über den ICMP-Channel hereinkommenden Pakete.
 
 \begin{lstlisting}[language=go, caption=mtu.Init(..) Funktion]                    
@@ -57,7 +57,6 @@ func FindAll() {
 }
 \end{lstlisting}
 
-\subsection{FastMTU Algorithmus - Versenden von Requests}
 In der \code{mtu.find(..)} Funktion werden zuerst einige Variablen wie \code{rangeStart}, \code{rangeEnd} etc. initialisiert. Danach wird ein for-Loop gestartet der so lange läuft bis die \ac{MTU} gefunden wurde. In diesem Loop wird dann die \code{mtu.sendBatch(..)} Funktion aufgerufen welche für einen Range die konfigurierte Anzahl \enquote{ConcurrentPackets} verschickt.
 
 \begin{lstlisting}[language=go, caption=Ein Batch von Paketen verschicken]                    
@@ -101,19 +100,16 @@ Wenn die \ac{MTU} erfolgreich gefunden wurde dann wird diese von der \code{mtu.f
 
 Nun wartet nur noch die \code{mtu.FindAll()} Funktion darauf dass die anderen \code{mtu.find(..)} Funktionen in ihren Goroutinen die \ac{MTU} Discovery beenden. Wenn dies geschehen ist legt die \code{mtu.FindAll()} Funktion eine Nachricht in den quit-Channel der \code{mtu.distribute- \linebreak MtuOkPackets(..)} Goroutine um diese zu schliessen. Damit ist ein vollständiger \ac{MTU} Discovery Vorgang abgeschlossen. Wie genau das Versenden von Paketen funktioniert wird nachfolgend noch etwas genauer erklärt.
 
-
-
-
-
-\todo{Senden von Paketen spezifisch erläutern}
-
-\subsection{ICMP Paket Payload}
-Alle vom \tool{} verschickten \acs{ICMP} Pakete haben jeweils die folgende Payload:
+\subsection{Versenden von Paketen}
+Das Versenden von Paketen ist in der \code{mtu} Package in der \code{sendPacket(..)} Funktion implementiert. Die \code{sendPacket(..)} Funktion nimmt die folgenden Parameter entgegen:
 
 \begin{itemize}
-  \item \textbf{AppID:} Eindeutige ID des aktiven \tool{}. Wird verwendet um mehrere gleichzeitig laufende \tool{} auf einem Rechner zu unterscheiden. Die AppID wird entweder in der Konfiguration fix festgelegt oder auf 0 gesetzt. Wenn die AppID in der Konfiguration auf 0 gesetzt wurde dann wird beim Programmstart eine zufällige AppID generiert.
-  \item \textbf{ChannelID:} ID des GO-Channels von dem das Paket versendet wurde. Wird benötigt um für mehrere Tunnels gleichzeitig die \acs{MTU} festzustellen zu können. Die ChannelID wird jeweils beim Start eines \acs{MTU} Discovery Vorgangs zugeteilt.
-  \item \textbf{Command:} Die eigentliche Nachricht des Pakets. Wird verwendet um sicherzustellen dass dieses \acs{ICMP} Paket wirklich von einem \tool{} versendet wurde und nicht ein sonstiges \acs{ICMP} Paket.
-  \item \textbf{Null-Array:} Ein mit Nullen gefülltes Array von variabler Grösse. Wird verwendet um dem Paket seine vorbestimmte Grösse zu geben.
+\item \textbf{sourceIP:} Zur Angabe des Netzwerkinterface über welches das Paket verschickt werden soll.
+\item \textbf{destinationIP:} Angabe des Zielorts des Pakets
+\item \textbf{size:} Die gewünschte Grösse des Pakets. Wenn ein Paket beispielsweise 200Byte gross sein soll der Inhalt aber nur 64 Bytes ausmacht wird der Rest mit Nullen aufgefüllt.
+\item \textbf{message:} Das Kommando an das empfangende \tool{}. Dient auch der Identifikation von Nachrichten, so das normale \ac{ICMP} Nachrichten ignoriert werden können.
+\item \textbf{appID:} Eindeutige ID des aktiven \tool{}. Wird verwendet um mehrere gleichzeitig laufende \tool{} auf einem Rechner zu unterscheiden. Die AppID wird entweder in der Konfiguration fix festgelegt oder auf 0 gesetzt. Wenn die AppID in der Konfiguration auf 0 gesetzt wurde dann wird beim Programmstart eine zufällige AppID generiert.
+\item \textbf{chanID:} ID des GO-Channels von dem das Paket versendet wurde. Wird benötigt um für mehrere Tunnels gleichzeitig die \acs{MTU} festzustellen zu können. Die ChannelID wird jeweils beim Start eines \acs{MTU} Discovery Vorgangs zugeteilt.
+\item \textbf{icmpType:} Wird verwendet um festzulegen ob das Paket ein \ac{ICMP} Request oder Reply sein soll.  
 \end{itemize}
 
