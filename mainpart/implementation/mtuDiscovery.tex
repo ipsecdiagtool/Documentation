@@ -110,6 +110,60 @@ Das Versenden von Paketen ist in der \code{mtu} Package in der \code{sendPacket(
 \item \textbf{message:} Das Kommando an das empfangende \tool{}. Dient auch der Identifikation von Nachrichten, so das normale \ac{ICMP} Nachrichten ignoriert werden können.
 \item \textbf{appID:} Eindeutige ID des aktiven \tool{}. Wird verwendet um mehrere gleichzeitig laufende \tool{} auf einem Rechner zu unterscheiden. Die AppID wird entweder in der Konfiguration fix festgelegt oder auf 0 gesetzt. Wenn die AppID in der Konfiguration auf 0 gesetzt wurde dann wird beim Programmstart eine zufällige AppID generiert.
 \item \textbf{chanID:} ID des GO-Channels von dem das Paket versendet wurde. Wird benötigt um für mehrere Tunnels gleichzeitig die \acs{MTU} festzustellen zu können. Die ChannelID wird jeweils beim Start eines \acs{MTU} Discovery Vorgangs zugeteilt.
-\item \textbf{icmpType:} Wird verwendet um festzulegen ob das Paket ein \ac{ICMP} Request oder Reply sein soll.  
+\item \textbf{icmpType:} Wird verwendet um festzulegen ob das Paket ein \ac{ICMP} Request oder Reply sein soll. 
 \end{itemize}
 
+Um nun ein Paket zu verschicken muss es zuerst mithilfe der Go- \code{net} Package aufgebaut werden. Dazu wird zuerst der IP-Layer gesetzt.
+
+\begin{lstlisting}[language=go, caption=IP Layer aufbauen]  
+ip := layers.IPv4{
+	SrcIP:    srcIP,
+	DstIP:    dstIP,
+	Version:  4,
+	TTL:      64,
+	Protocol: layers.IPProtocolICMPv4,
+}
+\end{lstlisting}
+
+Dann wird der ICMP Layer erstellt, die Payload generiert und zum Schluss das ganze serialisiert und in einen Buffer geschrieben.
+
+\begin{lstlisting}[language=go, caption=ICMP Layer aufbauen]  
+icmp := layers.ICMPv4{
+	TypeCode: icmpType,
+}
+opts := gopacket.SerializeOptions{
+	FixLengths:       true,
+	ComputeChecksums: true,
+}
+
+ipHeaderBuf := gopacket.NewSerializeBuffer()
+
+err := ip.SerializeTo(ipHeaderBuf, opts)
+if err != nil { panic(err) }
+
+payloadBuf := gopacket.NewSerializeBuffer()
+
+payload := gopacket.Payload(generatePayload(...))
+err = gopacket.SerializeLayers(payloadBuf, opts, &icmp, payload)
+if err != nil { panic(err) }
+\end{lstlisting}
+
+Nun muss nur noch der \enquote{Don't fragment} Flag im IP Header gesetzt werden und das Paket kann über eine RawConn Netzwerk Endpunkt versendet werden.
+
+\begin{lstlisting}[language=go, caption=Don't fragment setzen und Paket verschicken] 
+ipHeader, err := ipv4.ParseHeader(ipHeaderBuf.Bytes())
+ipHeader.Flags |= ipv4.DontFragment
+if err != nil {
+	panic(err)
+}
+
+var packetConn net.PacketConn
+var rawConn *ipv4.RawConn
+
+packetConn, err = net.ListenPacket("ip4:icmp", srcIP.String())
+if err != nil { panic(err) }
+rawConn, err = ipv4.NewRawConn(packetConn)
+if err != nil { panic(err) }
+
+err = rawConn.WriteTo(ipHeader, payloadBuf.Bytes(), nil)
+\end{lstlisting}
