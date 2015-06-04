@@ -1,10 +1,27 @@
 \section{MTU Discovery}
 \label{sec:MTU Discovery}
 
-\todo{Intro}
+Die \ac{MTU} Discovery wurde in der \code{mtu} Package implementiert. Darin enthalten sind \code{analyze.go}, \code{capture.go} und \code{send.go} sowie die dazugehörigen Unit Tests.
 
-\todo{Beschreiben wie programmiert in Code}
+\subsection{Öffentliche Funktionen}
+Die \code{mtu} Package bietet die folgenden öffentlichen Funktionen:
 
+\begin{itemize}
+\item \textbf{Init(config config.Config, icmpPackets chan gopacket.Packet):} \\
+Diese Funktion wird zur Initialisierung der \code{mtu} Package verwendet. Die Package muss zwingend vor der Verwendung der \code{FindAll()} Funktion initialisiert werden. Zur Initialisierung wird die Konfiguration sowie die der für \ac{ICMP} Pakete verwendete Go-Channel übergeben.
+\item \textbf{Find(mtuConf config.MTUConfig, appID int, chanID int, mtuOK chan int, wg *sync.WaitGroup) int:} \\
+Die \code{Find(..)} Funktion sucht die \ac{MTU} einer Verbindung und gibt diese dann zurück. Diese Funktion wurde im Hinblick auf eine potentielle Verwendung als Library veröffentlicht. Aktuell benötigt sie aber etwas viele Parameter und sollte refactored werden. Im \tool{} selbst wird die Funktion nur in der \code{MTU} Package gebraucht.
+\item \textbf{FindAll():} \\
+\code{FindAll()} sucht die \ac{MTU}s aller konfigurierten Verbindungen und meldet die Ergebnisse via der \code{logging} Package.
+\item \textbf{RequestDaemonMTU(appID int, sourceIP string, destinationIP string):} \\
+Die Funktion \code{RequestDaemonMTU(..)} sendet ein ICMP Request an die übergebene Destionation IP mit dem Kommando einen \ac{MTU} Discovery Vorgang zu starten. Die Funktion erwartet die AppID, Source- und Destination Adresse.
+\end{itemize}
+
+\subsection{Implementation des FastMTU Algorithmus}
+Der FastMTU Algorithmus ist in \code{analyze.go} implementiert. 
+
+
+\subsection{ICMP Paket Payload}
 Alle vom \tool{} verschickten \acs{ICMP} Pakete haben jeweils die folgende Payload:
 
 \begin{itemize}
