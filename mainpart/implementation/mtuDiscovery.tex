@@ -9,8 +9,6 @@ Die \code{mtu} Package bietet die folgenden öffentlichen Funktionen:
 \begin{itemize}
 \item \textbf{Init(config config.Config, icmpPackets chan gopacket.Packet):} \\
 Diese Funktion wird zur Initialisierung der \code{mtu} Package verwendet. Die Package muss zwingend vor der Verwendung der \code{FindAll()} Funktion initialisiert werden. Zur Initialisierung wird die Konfiguration sowie die der für \ac{ICMP} Pakete verwendete Go-Channel übergeben.
-\item \textbf{Find(mtuConf config.MTUConfig, appID int, chanID int, mtuOK chan int, wg *sync.WaitGroup) int:} \\
-Die \code{Find(..)} Funktion sucht die \ac{MTU} einer Verbindung und gibt diese dann zurück. Diese Funktion wurde im Hinblick auf eine potentielle Verwendung als Library veröffentlicht. Aktuell benötigt sie aber etwas viele Parameter und sollte refactored werden. Im \tool{} selbst wird die Funktion nur in der \code{MTU} Package gebraucht.
 \item \textbf{FindAll():} \\
 \code{FindAll()} sucht die \ac{MTU}s aller konfigurierten Verbindungen und meldet die Ergebnisse via der \code{logging} Package.
 \item \textbf{RequestDaemonMTU(appID int, sourceIP string, destinationIP string):} \\
@@ -18,7 +16,47 @@ Die Funktion \code{RequestDaemonMTU(..)} sendet ein ICMP Request an die übergeb
 \end{itemize}
 
 \subsection{Implementation des FastMTU Algorithmus}
-Der FastMTU Algorithmus ist in \code{analyze.go} implementiert. 
+Der FastMTU Algorithmus ist in \code{analyze.go} implementiert. Bevor der \ac{MTU} Discovery Vorgang gestartet werden kann muss die \code{mtu} Package via der \code{mtu.init(..)} Funktion initialisiert werden. Bei der Initialisierung wird Konfiguration übergeben sowie ein Go-Channel der abgefangene \ac{ICMP} Pakete liefert (ICMP-Channel). Ausserdem wird die Funktion \code{mtu.handlePackets(..)} in einer Goroutine gestartet. Diese Funktion behandelt die über den ICMP-Channel hereinkommenden Pakete.
+
+\begin{lstlisting}[language=go, caption=mtu.Init(..) Funktion]                    
+func Init(config config.Config, icmpPackets chan gopacket.Packet) {
+	conf = config
+	icmpPacketsStage1 = icmpPackets
+	icmpPacketsStage2 = make(chan gopacket.Packet, 100)
+	initalized = true
+	go handlePackets(icmpPacketsStage1, icmpPacketsStage2, conf.ApplicationID)
+}
+\end{lstlisting}
+
+Nachdem die Package initialisiert ist kann der \ac{MTU} Discovery Vorgang durch einen Aufruft der \code{mtu.FindAll()} Funktion gestartet werden. Die \code{mtu.FindAll()} Funktion iteriert nun durch alle konfigurierten Tunnels und startet für jeden Tunnel eine Goroutine (\code{mtu.find(..)}), welche die spezifische Suche nach der \ac{MTU} durchführt.
+Ausserdem wird noch eine Goroutine (\code{mtu.distributeMtuOkPackets(..)}) gestartet welche die Verteilung der hereinkommenden \ac{ICMP} Pakete auf die \code{mtu.find(..)}-Goroutinen übernimmt.
+Danach wartet die \code{mtu.FindAll()} Funktion auf die Rückmeldungen der \code{mtu.Find(..)}-Goroutinen.
+
+\begin{lstlisting}[language=go, caption=mtu.Init(..) Funktion]                    
+func FindAll() {
+	if !initalized { log.Println("Please init...") return }
+	c := conf
+	//Setup a mtuOK channel for each config
+	var mtuOkChannels = make(map[int]chan int)
+	for conf := range c.MTUConfList {
+		mtuOkChannels[conf] = make(chan int, 100)
+	}
+	var quitDistribute = make(chan bool)
+	go distributeMtuOkPackets(icmpPacketsStage2, mtuOkChannels, quitDistribute)
+
+	var wg sync.WaitGroup
+	for conf := range c.MTUConfList {
+		logging.InfoLog("Starting MTU Disc...")
+		wg.Add(1)
+		go find(c.MTUConfList[conf], c.ApplicationID,
+			conf, mtuOkChannels[conf], &wg)
+	}
+	//Wait until all MTUs have been detected
+	wg.Wait()
+	quitDistribute <- true
+}
+\end{lstlisting}
+
 
 
 \subsection{ICMP Paket Payload}
