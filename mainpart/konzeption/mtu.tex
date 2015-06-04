@@ -1,4 +1,45 @@
+\cleardoublepage
 \section{MTU Bestimmung}
 \label{sec:MTU Bestommung}
 
-\todo{Konzept der MTU Discovery erklären ohne Code.}
+Um die bei der Analyse erwähnten Probleme von \acs{PMTUD} zu vermeiden wird die \acs{MTU} vom \tool{} innerhalb des \acs{VPN} Tunnels festgestellt.
+
+Dazu werden \acs{ICMP} Pakete vom Typ \enquote{ICMPv4TypeEchoRequest} und \enquote{ICMPv4TypeEcho-Reply} verwendet. Diese Pakete werden wie bei \acs{PMTUD} mit einem \enquote{Don't fragment} Flag versehen. Im Unterschied zu \acs{PMTUD} werden sie aber im \acs{VPN} Tunnels übermittelt und werden daher in \acs{ESP}s gekapselt. Ausserhalb des Tunnels sind die ICMP Pakete des \tool{}s so nicht unterscheidbar vom normalen Verkehrs und können nicht blockiert werden.
+Der \enquote{Don't fragment} Flag jedoch wird bis in die \acs{ESP} Hülle weitergezogen so dass auch das \acs{ESP} welches das \acs{ICMP} Paket transportiert nicht fragmentiert wird.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[trim=1 0 0 0,clip,width=\textwidth]{mainpart/implementation/img/ESP_DontFragment}
+    \end{center}
+    \caption{In ESP gekapseltes ICMP Paket mit \enquote{Don't fragment} flag.}
+\end{figure}
+
+Um den \acs{MTU} Discovery Vorgang zu starten wird jeweils ein \enquote{ICMPv4TypeEchoRequest} versendet. Wenn der Ziel Computer das Paket erhält dann sendet er ein Ping Reply mit dem gleichen Paketinhalt zurück.
+
+\begin{figure}[H]
+    \begin{center}
+    		% GFX Trim left bottom right top
+        \includegraphics[trim=30 80 140 20,clip,width=\textwidth]{mainpart/implementation/img/MTUBestimmungErfolgreich}
+    \end{center}
+    \caption{Vereinfachter Ablauf der MTU Bestimmung}
+\end{figure}
+
+Die obenstehende Grafik zeigt den weiteren Ablauf der \acs{MTU} Bestimmung mit dem \tool{}. Alice sendet ein \enquote{ICMPv4TypeEchoRequest} Paket und einer bestimmten Grösse an Bob. Wenn Bob das Paket erhält, sendet er ein \enquote{ICMPv4TypeEchoReply} Paket mit derselben Grösse als Antwort. Alice erhöht darauf die Paketgrösse und schickt erneut ein \enquote{ICMPv4TypeEchoRequest} an Bob. Dies wird so lange wiederholt bis das Paket nicht mehr ankommt. Bob erhält also das \enquote{ICMPv4TypeEchoRequest} Paket nicht und kann somit Alice auch keine Antwort schicken. Alice wartet nun einen konfigurierten Timeout ab. Wenn innerhakb des Timeouts keine Antwort ankommt geht Alice davon aus dass das Paket aufgrund der \ac{MTU} von Bob verloren gegangen ist. So lässt sich die \acs{MTU} zwischen Alice und Bob ermitteln.
+
+\subsection{MTU-Bestimmung - FastMTU}
+Die im vorigen Kapitel beschriebene Art der \acs{MTU} Bestimmung ist natürlich noch stark vereinfacht. In der Realität lohnt es sich nicht nach jedem Paket auf den Ablauf des Timeout zu warten. In diesem Kapitel wird beschrieben wie die MTU Discovery im \tool konkret implementiert ist. Dieser von uns entwickelte Ansatz haben wir \enquote{FastMTU} getauft.
+
+Bei FastMTU bleibt das grundlegende Prinzip der \acs{MTU} Bestimmung gleich, es werden Pakete unterschiedlicher Grösse versendet so dass man herausfinden kann welche ankommen und welche verworfen werden. Neu wird jedoch nicht nur ein Paket aufs Mal versendet sondert einen ganze Batch von Paketen. Dazu wird aus der Konfiguration einen sogenannter Range ausgelesen. Der Range besteht aus zwei Byte-Grössen die festlegen worin sich die \acs{MTU} typischerweise befinden sollte. Zum Beispiel zwischen 0 und 2000 Bytes. Dann wird aus der Konfiguration ausgelesen wie viele Pakete aufs Mal versendet werden sollen. Mehr gleichzeitige Pakete führen zu einer schnelleren Bestimmung der \acs{MTU}, haben aber auch zur Folge dass die \acs{VPN} Verbindung stärker belastet wird und so möglicherweise wichtiger Kunden-Traffic ausgebremst wird. Als Default-Wert gehen wir von 20 gleichzeitigen Paketen aus. Der Range 0-2000 Bytes wird jetzt also durch 20 geteilt. Damit erhält man 20 Pakete die sich je um 100 Bytes unterscheiden. Diese 20 Pakete werden nun als einen Batch versendet.
+Für alle Pakete die auf der anderen Seite des Tunnels ankommen wird nun eine Antwort generiert. Bei einer MTU von 1500 Bytes würden die ersten 15 Pakete ankommen. Der Sender weiss jetzt also dass die exakte \acs{MTU} zwischen dem letzten erfolgreichen Paket (1500) und dem ersten nicht erfolgreichen Paket (1600) sein muss. 1500-1600 Bytes wird nun als neuer Range gesetzt und erneut durch die Anzahl gleichzeitiger Pakete geteilt. Die Pakete des zweiten Batches haben jetzt noch 5 Bytes Unterschied. Dieser Vorgang wird so lange wiederholt bis der Unterschied zwischen den Paketen eines Batches nur noch 1 Byte sind. Dadurch weiss der Algorithmus wenn die exakte \acs{MTU} gefunden wurde.
+
+Bei einer MTU zwischen 0-2000 Bytes werden 3 Batches an Paketen versendet. Pro Batch muss jeweils die Dauer des Timeout-Timers gewartet werden. Daher lässt sich bereits im voraus sagen wie lange das Finden der exakten \acs{MTU} mit FastMTU dauern wird. Gerade in Gegenden die noch per Satelliten-Link angebunden sind kann es durchaus mal länger bis alle Pakete ankommen. Gemäss der \osag ist ein Timeout von 10 Sekunden für solche Verbindungen realistisch. Das Bestimmen der \acs{MTU} zwischen 0 und 2000 Bytes hätte also 30 Sekunden gedauert.
+Die verbrauchte Zeit beim Bestimmen von FastMTU lässt sich sehr leicht via der Konfiguration optimieren. So hat man die Möglichkeit den Range stärker einzuschränken, den Timeout zu verkürzen oder aber mehr Pakete pro Batch zu versenden.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[clip,width=\textwidth]{mainpart/implementation/img/FastMTUAlgorithm}
+    \end{center}
+    \caption{Ablauf einer MTU Discovery zwischen 0 und 2000Bytes}
+\end{figure}
+
+Auch wenn die \acs{MTU} sich ausserhalb des Ranges befindet wird sie von FastMTU noch korrekt detektiert. Wenn nämlich alle Pakete eines Batches eine erfolgreiche Antwort der Gegenseite generieren, dann wird der nächste Range einfach um die Grösse des überprüften Range vergrössert. Im Beispiel mit einem Range von 0-2000 Bytes würde jetzt einfach 2000-4000 Bytes überprüft.
