@@ -31,9 +31,25 @@ Die Protokolle der ersten beiden Layern haben im Vergleich zu den höheren Layer
 
 Wenn ein Layer 3 Paket grösser als die \ac{MTU} ist dann muss es in mehrere Pakete aufgeteilt werden. Dieser Vorgang wird Fragmentierung genannt. Auch wenn Paket-Fragmentierung auftritt funktioniert eine Netzwerkverbindung normalerweise immer noch problemlos, es gibt jedoch auf Grund der Fragmentierung Performance-Einbussen. Daher versucht man, wenn möglich, Paket-Fragmentierung zu vermeiden.
 
+\subsection{Hardware Abhängigkeit}
+Die \ac{MTU} ist ein Hardware abhängiger Wert, der je nach der eingesetzten Technologie anders ist. Die Tabelle unten zeigt die \ac{MTU}s von einigen heute verwendeten Übertragungstechnologien.
+
+\begin{table}[H]
+\begin{tabularx}{\textwidth}{l|>{\raggedright\arraybackslash}X} 
+\textbf{Technologie} & \textbf{MTU in Bytes} \\
+\hline
+\ac{FDDI} \cite[:915]{rfc1191} & 4352 \\
+Ethernet \cite[:915]{rfc1191} & 1500 \\
+\ac{PPPoE} \cite[:374]{rfc2516}& 1492 \\
+X.25 Networks / ISDN \cite[:915]{rfc1191} & 576 \\
+\end{tabularx}
+\caption{Typische MTU-Grössen}
+\end{table}
+
+Wenn eine Verbindung von A nach B in mehrere Wegstrecken aufgeteilt ist und für diese Wegstrecken unterschiedliche Technologien verwendet werden dann ist die tiefste \ac{MTU} relevant für das Versenden von Paketen.
+
 \subsection{Path MTU Discovery}
-\todo{höhere Protokolle kenne tiefere nicht, darum Discovery}
-Normalerweise wird die \ac{MTU} automatisch via \ac{PMTUD} (Path MTU Discovery) ermittelt. Dabei werden \ac{ICMP} Pakete unterschiedlicher Grösse die mit einem \enquote{Don't fragment} Flag versehen sind über die Verbindung gesandt. Wenn ein solches Paket auf ein Netzwerkgerät trifft dass eine kleinere \ac{MTU} konfiguriert hat als die Paketgrösse wird das Paket nicht weitergesendet, stattdessen wird ein \ac{ICMP} Paket mit dem Inhalt "Fragmentation needed" retourniert. So weiss der \ac{PMTUD} Algorithmus dass die \ac{MTU} der Verbindung überschritten wurde \cite[:131]{rfc1191}.
+Da die \ac{MTU} bei einer neuen Verbindung noch unbekannt ist muss sie zuerst ermittelt werden. Normalerweise geschieht dies automatisch via \ac{PMTUD}. Dabei werden \ac{ICMP} Pakete unterschiedlicher Grösse die mit einem \enquote{Don't fragment} Flag versehen sind über die Verbindung gesandt. Wenn ein solches Paket auf ein Netzwerkgerät trifft dass nur eine tiefere \ac{MTU} unterstützt wird das Paket nicht weitergesendet, stattdessen wird ein \ac{ICMP} Paket mit dem Inhalt "Fragmentation needed" retourniert. So weiss der \ac{PMTUD} Algorithmus dass die \ac{MTU} der Verbindung überschritten wurde \cite[:131]{rfc1191}.
 
 \ac{PMTUD} hat jedoch ein Problem. Router die, die \ac{ICMP} Pakete weiterleiten oder aber ein \enquote{Fragmentation needed} Paket zurücksenden sollten tun dies nicht immer. Dieses Fehlverhalten gibt es aus mehreren Gründen. Zum einen wegen Kernel-Bugs, Fehlkonfigurationen und zum anderen auch weil Firewalls manchmal so konfiguriert werden dass sie \ac{ICMP} Nachrichten nicht durchlassen auf Grund von Sicherheitsbedenken \cite[:137]{rfc2923}.
 
