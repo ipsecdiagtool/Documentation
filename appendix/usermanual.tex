@@ -3,19 +3,15 @@
 The \entool{} is a diagnosis application for the continuous monitoring of \acs{IPsec} \acs{VPN} tunnels. It has two main features. Firstly it's capable of passively detecting packet loss occurring within the \acs{IPsec} tunnels. If the packet loss exceeds a specified threshold a Syslog warning is automatically dispatched. Secondly the \entool{} can actively determine the exact \acs{MTU} within a tunnel. This is useful when you're dealing with badly configured routers that block regular \acs{ICMP} messages outside of the tunnel. The \entool{} is designed to run as a daemon/service, but for testing purposes it also has a interactive mode.
 
 \section{Installation Guide}
-This chapter explains how to compile \& install the \entool{}.
 
 \subsection{System Requirements}
 The \entool{} is currently set up to run on Linux based systems and it requires a installation of the libpcap0.8-dev package. Depending on your local settings you may need to run the \entool{} as superuser (sudo) to be able to capture packets.
 
 Although the \entool{} has only been tested on Linux based systems you may be able to get it running on OS X or windows without or with very few changes to its source code. The application was designed with a broad compatibility in mind.
-
-While capturing 300mbit/s of packet-data the tool requires about 20\% CPU Usage on a modern Intel Xeon processor. So make sure to have enough spare processing power on your VPN routers.
-
-\todo{CPU and RAM performance impact requirements überprüfen / mit aktuellen Daten ergänzen.}
+\cleardoublepage
 
 \section{Installation}
-To install the \entool{} you need to run the following bash script. It will take care of setting up a tempoary go-environment and getting the proper dependencies. You can also get the latest version of the build-script from the Github-Repository (\url{https://github.com/ipsecdiagtool/ipsecdiagtool/blob/master/build.sh}).
+To install the \entool{} you need to run the following bash script. It will take care of setting up a temporary go-environment and getting the proper dependencies. You can also get the latest version of the build-script from the Github-Repository (\url{https://github.com/ipsecdiagtool/ipsecdiagtool/blob/master/build.sh}).
 
 \lstset{language=bash, breaklines=true}
 \begin{lstlisting}
@@ -63,7 +59,6 @@ go get github.com/ipsecdiagtool/ipsecdiagtool
 
 
 \section{Usage}
-This chapter explains how to use the \entool{}.
 
 \subsection{Commands}
 The \entool{} can be run either as a local application or in daemon mode. The following commands can be used to control the \entool{} when it is launched as a local application. After this table you will find specific information and examples for typical use cases.
@@ -117,7 +112,6 @@ Whenever a \acs{MTU} discovery process is started a message is sent to the syslo
 
 \subsection{Daemon Packet Loss Detection}
 There are no additional steps involved to detect packet loss. Whenever the daemon is running, it is automatically detecting packet loss. The results of the packet loss detection are sent to the syslog server specified in the configuration and also written to a file located at \code{/var/log/}.
-\todo{Jan: check if correct location}
 
 \subsection{Interactive MTU Discovery}
 In order to launch a interactive \acs{MTU} discovery you need to run the command \code{ipsecdiagtool i mtu}. This will start the \acs{MTU} discovery for all configured tunnels and display a live result in the console. A successful discovery process may look like the following listing.
@@ -146,7 +140,7 @@ Syslog Info: MTU between 127.0.0.1 and 127.0.0.1 is 1500. Reported by AppID 9769
 
 \subsection{Interactive Packet Loss Detection}
 To start a interactive packet loss detection you can run the tool with \code{ipsecdiagtool i pl}. It will now listen to the configured port and display all incomming packets. If you want to run a specific test you can also specify the location of a pcap file as an additional parameter. For example \code{ipsecdiagtool i pl /local/awesome.pcap}. Since pcap files can be easily manipulated they're ideal to run special test scenarios.
-\clearpage
+
 \subsection{Configuration}
 The \entool{} stores its configuration as \code{../[execution directory]/etc/ipsecdiagtool.json}. If there is no \code{ipsecdiagtool.json} file at \code{../[execution directory]/etc} the tool will check if there is a configuration file in your current working directory. This behaviour was implemented to allow for a permanent config when launching the program from an \acs{IDE}. If there is no config in your current working directory a new config is created in \code{../[execution directory]/etc} containing default values.
 The config is valid json and can be edited through a normal editor such as \enquote{vim} or \enquote{nano}.
@@ -192,10 +186,10 @@ The following list describes each configuration option in detail.
 	  \item \code{MTURangeEnd}: A positive integer that is larger then the largest possible \acs{MTU}. For example the \acs{MTU} of a normal, physical ethernet connection is 1500, so a good choice would be 2000. If you are using a different protocol than ethernet you may want to look up its maximal \acs{MTU} and put a value greater than that as \code{MTURangeEnd}.
 	  \item \code{ConcurrentPackets}: The maximal amount of packets that are sent out in one batch. More concurrent packets increase the speed in which the \acs{MTU} can be detected but they also cause more network traffic. A good value, that has been tested throughly is 20.
   \end{enumerate}
-  \item \code{WindowSize}: The size of the ESP window. Defaultvalue is 32.
+  \item \code{WindowSize}: The size of the ESP window. Default is 32.
   \item \code{InterfaceName}: The interface that is used to capture packets for the packet loss detection and \acs{MTU} discovery. Ideally this option is set to \code{any} in order to capture packets from all available interfaces. 
-  \item \code{AlertTime}:  How far back the Packets are validated for the Alert. The value is in Seconds.
-  \item \code{AlertCounter}: How many packets are needed before an alert is sent to the SyslogServer.
+  \item \code{AlertTime}:  How far back the packets are validated for the alert. The value is in seconds.
+  \item \code{AlertCounter}: How many packets have to be missing before an alert is sent to the syslog server.
   \item \code{PcapFile}: The location of a pcap file. This pcap file is used for the packet loss detection instead of real network traffic from a interface. If this is empty the real network interface is used.
   \item \code{CfgVers}: There is never any need for you to manually change this value. The CfgVers is used to determine whether the current configuration needs to be updated automatically when a new configuration-option has been added to the application.
 \end{enumerate}
