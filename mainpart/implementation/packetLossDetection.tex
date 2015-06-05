@@ -3,28 +3,20 @@
 
 \subsection{Vorgehen bei Paketverlust}
 
-{\raggedright
-Falls ein \"{U}bertragungsmedium nicht korrekt funktioniert ist es m\"{o}glich,
-dass Datenpakete nicht am Ziel ankommen oder mit einer zu grossen Versp\"{a}tung.
-Da jedes \esp Paket mit einer Sequenznummer versehen ist, k\"{o}nnen diese
-Paketverluste erkannt und gemeldet werden.
-}
+Falls ein Übertragungsmedium nicht korrekt funktioniert, ist es möglich, dass Datenpakete nicht am Ziel oder mit einer zu grossen Verspätung ankommen.
+Da jedes \esp{} Paket mit einer Sequenznummer versehen ist, können diese Paketverluste erkannt und gemeldet werden.
 
-{\raggedright
-Die \esp Pakete Besitzen zum Schutz vor Replay-Angriffen eine Sequenznummer sowie
-einen bestimmten G\"{u}ltigkeitsbereich (Windowsize).
-\\
-Die Pakete k\"{o}nnen zum Beispiel durch Loadbalancing \"{u}ber unterschiedliche
-Pfade verschickt werden. Dadurch kann die Reihenfolge der Pakete am Ziel nicht
-mehr gew\"{a}hrleistet werden. Die zu sp\"{a}t ankommenden Pakete m\"{u}ssen
-daher \"{u}berpr\"{u}ft werden, ob die Sequenznummer aktuell noch g\"{u}ltig ist
-(innerhalb des Window).
-}
+Die \esp{} Pakete besitzen zum Schutz vor Replay-Angriffen eine Sequenznummer sowie einen bestimmten Gültigkeitsbereich (Windowsize).\\
+Die Pakete können zum Beispiel durch Loadbalancing \"{u}ber unterschiedliche Pfade verschickt werden. Dadurch kann die Reihenfolge der Pakete am Ziel nicht mehr gewährleistet werden. Die zu spät ankommenden Pakete müssen daher Überprüft werden, ob die Sequenznummer aktuell noch gültig ist (innerhalb des Window).
+
+\todo{Jan: Caption bei Grafik hinzufügen}
 
 \includegraphics[width=1\textwidth]{start/img/Sequenznummern.png}
 
 \subsection{Datenstruktur für die \esp Verbindungen}
-Da pro Verbindung separate Sequenznummern verwendet werden, werden die verschiedenen Verbindungen durch eine Hashmap verwaltet. Als Key wird eine Struktur aus Source, Destination und \acs{SPI} verwendet. Als Value werden grundsätzlich zwei Listen für die Lost und MaybeLost Pakete benötigt. Zusätzlich wird noch ein Wert für den aktuellen Head gespeichert.
+Pro Verbindung werden separate Sequenznummern verwendet. Die verschiedenen Verbindungen werden durch eine Hashmap verwaltet. Als Key wird eine Struktur aus Source, Destination und \acs{SPI} verwendet. Als Value werden grundsätzlich zwei Listen für die Lost und MaybeLost Pakete benötigt. Zusätzlich wird noch ein Wert für den aktuellen Head gespeichert.
+
+\todo{Jan: Caption bei Grafik hinzufügen}
 
 \includegraphics[width=1\textwidth]{start/img/Datenstruktur.png}
 
@@ -64,12 +56,12 @@ for(MaybeLost){
 \section{Syslogprotokoll}
 \label{sec:Syslogprotokoll}
 
-\noindent Syslog ist eines der am häufigsten eingesetzten Protokolle zum Übermitteln von Log-Meldungen in einem Netzwerk. Durch den einfachen Aufbau und die breite Unterstützung ist es leicht einsetzbar.
+Syslog ist eines der am häufigsten eingesetzten Protokolle zum Übermitteln von Log-Meldungen im Netzwerk. Durch den einfachen Aufbau und die breite Unterstützung ist es leicht einsetzbar.
 
 
 \subsection{ Aufbau}
 
-\noindent Eine Syslog-Meldung besitzt ein Severity-Field womit der Schweregrad einer Nachricht festgelegt werden kann.
+Eine Syslog-Meldung besitzt ein Severity-Field, womit der Schweregrad einer Nachricht festgelegt werden kann.
 
 \noindent Die Werte besitzen folgende Bedeutungen:
 
@@ -85,12 +77,10 @@ Code & \textbf{Severity} \\ \hline
 7 & \textbf{Debug:} debug-level messages \\ \hline 
 \end{tabular}
 
+\todo{RFC zitieren}
 RFC 5424
 
-\noindent Zudem besteht eine Meldung noch aus einem Header sowie der eigentlichen Nachricht.
-
-\noindent 
-
+Zudem besteht eine Meldung noch aus einem Header, sowie der eigentlichen Nachricht.
 
 \section{ Meldungsaufbau}
 
@@ -100,32 +90,26 @@ RFC 5424
 
 \begin{tabular}{|p{0.5in}|p{0.7in}|p{3.0in}|} \hline 
 Severity & Programm & Meldung \\ \hline 
-1 & IpsecDiagTool & Too much LostPackets in Connection: (SPI: \dots ,SRC:\dots ,DST\dots ) \\ \hline 
+1 & IPsecDiagTool & Too much LostPackets in Connection: (SPI: \dots ,SRC:\dots ,DST\dots ) \\ \hline 
 \end{tabular}
 
+\todo{Tabelle überschneidet sich.}
 
-
-\noindent So kann gleich anhand der Meldung erkannt werden um welche Verbindung es sich handelt und die notwendigen Schritte für eine Korrektur vorgenommen werden.
+\noindent So kann gleich anhand der Meldung erkannt werden, um welche Verbindung es sich handelt und die notwendigen Schritte für eine Korrektur vorgenommen werden.
 
 \noindent Damit es nicht zu einer Flut von Benachrichtigungen mit dem gleichen Inhalt und den gleichen Paketen kommt, wurde ein Timer von 10 Sekunden eingeführt.
 
-
 \section{ Logging Package}
 
-\noindent Das Logging wurde in einem separaten Package umgesetzt und stellt Methoden für das Logging zur verfügung. Das Package kapselt die benötigte Funktionalität die von „log/syslog`` benötigt wird.
+\noindent Das Logging wurde in einem separaten Package umgesetzt und stellt Methoden für das Logging zur Verfügung. Die Package kapselt die benötigte Funktionalität, die von \code{log/syslog} benötigt wird.
 
 \noindent Das Package wird vor Verwendung der Logging Funktionalität durch InitLogger initialisiert. Dabei werden die Werte für Zeitfenster, Anzahl Packete und Syslogserver gesetzt. Danach können die Benachrichtigungen mit AlertLog und InfoLog erstellt werden.
 
-\noindent 
-
-
 \section{ Benachrichtigung mit Datei}
 
-\noindent Gleichzeitig mit dem Syslogeintrag wird eine CSV Datei erstellt. Die Datei Beinhaltet detaillierte Informationen um welche verlorenen Pakete es sich handelt und mit welchem Abstand ein Verlust detektiert wurde. Ausserdem gibt es Informationen ob ein Paket möglicherweise zu spät eingetroffen ist (also ausserhalb des Windows für die Sequenznummern). Falls dieses Problem vermehrt eintritt könnte ein erhöhen der Windowsize nötig sein.
+\noindent Gleichzeitig mit dem Syslogeintrag wird eine CSV Datei erstellt. Die Datei beinhaltet detaillierte Informationen um welche verlorenen Pakete es sich handelt und mit welchem Abstand ein Verlust detektiert wurde. Ausserdem gibt es Informationen, ob ein Paket möglicherweise zu spät eingetroffen ist (also ausserhalb des Windows für die Sequenznummern). Falls dieses Problem vermehrt eintritt, könnte ein Erhöhen der Window-Size nötig sein.
 
 \noindent Die Datei wurde so angepasst, dass sie mit Microsoft Excel oder ähnlichen Programmen problemlos gelesen und weiter verarbeitet werden kann.
-
-\noindent 
 
 \noindent Beispiel einer Datei
 
@@ -138,6 +122,4 @@ Sequencenumber & Timestamp & ReceivedLater \\ \hline
 5 & Monday, 04-May-15 11:53:42 CEST & false \\ \hline 
 \end{tabular}
 
-
-
-\noindent 
+\todo{Tabelle mit Caption versehen und Überschneiden beheben.}
