@@ -52,7 +52,7 @@ Nachdem Initialisieren werden die Goroutinen der \code{mtu} und \code{packetloss
 \subsection{Pakete einfangen}
 Das Einfangen von Paketen mit \ac{PCAP} ist in der \code{capture} Package implementiert. Sie bietet nur eine öffentliche Funktion die via \code{capture.Start(..)} aufgerufen werden kann. Als Parameter nimmt die Funktion die Konfiguration sowie ein Channel für \ac{ICMP}s und ein Channel für \ac{ESP}s entgegen. 
 
-Wenn die Funktion \code{capture.Start(..)} aufgerufen wird, werden die benötigten Variablen in der \code{capture} Package initialisiert und danach eine separate Goroutine mit der \code{capture.capture(..)} Funktion gestartet. Die \code{capture.Start(..)} Funktion ist blockierend bis die \code{capture.capture(..)} Goroutine gemeldet hat dass sie bereit ist. \code{Capture.Start(..)} gibt ein Channel zurück der verwendet werden kann um die \linebrea \code{capture.capture(..)} Goroutine zu beenden.
+Wenn die Funktion \code{capture.Start(..)} aufgerufen wird, werden die benötigten Variablen in der \code{capture} Package initialisiert und danach eine separate Goroutine mit der \code{capture.capture(..)} Funktion gestartet. Die \code{capture.Start(..)} Funktion ist blockierend bis die \code{capture.capture(..)} Goroutine gemeldet hat dass sie bereit ist. \code{Capture.Start(..)} gibt ein Channel zurück der verwendet werden kann um die \linebreak \code{capture.capture(..)} Goroutine zu beenden.
 
 \begin{lstlisting}[language=go, caption=Öffentliche Funktion capture.Start()]     
 func Start(c config.Config, icmpPackets chan gopacket.Packet, ipsecESP chan gopacket.Packet) chan bool {
