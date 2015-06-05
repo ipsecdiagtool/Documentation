@@ -5,37 +5,37 @@
 
 \begin{itemize}
 
-\item \textbf{M0: Paket Verlust messen} \\
-Das \tool{} soll den Paket-Verlust von allen konfigurierten \ac{IPsec} \ac{VPN}-Verbindungen bestimmen.
+\item \textbf{M0: Paket-Verlust messen} \\
+Das \tool{} muss den Paket-Verlust von allen konfigurierten \ac{IPsec} \ac{VPN}-Verbindungen bestimmen können.
 
-\item \textbf{M1: Paket Verlust melden} \\
-Wenn ein konfigurierter Grenzwert überschritten wird soll das \tool{} automatisch eine Meldung an einen zentralen Syslog Server absetzen.
+\item \textbf{M1: Paket-Verlust melden} \\
+Wenn ein konfigurierter Grenzwert überschritten wird muss das \tool{} automatisch eine Meldung an einen zentralen Syslog Server absetzen.
 
-\item \textbf{M2: Paket Verluste dokumentieren} \\
-Für jedes verlorene Paket soll in einem lokalen Log ein Eintrag erzeugt werden. Wenn das Paket später noch ankommt soll dies ebenfalls vermerkt werden.
+\item \textbf{M2: Paket-Verluste dokumentieren} \\
+Für jedes verlorene Paket muss in einem lokalen Log ein Eintrag erzeugt werden. Wenn das Paket später noch ankommt wird dies ebenfalls vermerkt.
 
 \item \textbf{M3: MTU Bestimmen} \\
-Das \tool{} soll in der Lage sein die \ac{MTU} zwischen zwei Routern bestimmen zu können. Dabei läuft das \tool{} auf mindestens einem der beiden Routern.
+Das \tool{} muss in der Lage sein die \ac{MTU} zwischen zwei Routern bestimmen zu können. Dabei läuft das \tool{} auf mindestens einem der beiden Routern.
 
 \item \textbf{M4: MTU Melden} \\
-Eine erfolgreich bestimmte \ac{MTU} soll an einen zentralen Syslog Server gemeldet werden.
+Eine erfolgreich bestimmte \ac{MTU} muss an einen zentralen Syslog Server gemeldet werden.
 
 \item \textbf{M6: Konfiguration} \\
-Alle notwendigen Einstellungen lassen sich vom User ohne Änderung des Source Codes vornehmen.
+Alle notwendigen Einstellungen müssen sich vom User ohne Änderung des Source Codes vornehmen lassen.
 
 \end{itemize}
 
 \subsection{Soll-Kriterien}
 \begin{itemize}
 
-\item \textbf{S0: MTU für mehrere Tunnels bestimmen:} \\
+\item \textbf{S0: MTU für mehrere Tunnels bestimmen} \\
 Für die \ac{MTU} Bestimmung sind mehrere Tunnels konfigurierbar. Wenn die \ac{MTU} Bestimmung ausgeführt wird, werden die \ac{MTU}s von allen konfigurierten Tunnels bestimmt.
 
 \item \textbf{S1: Parallele MTU Bestimmung} \\
 Die \ac{MTU} Bestimmung für mehrere Tunnels soll parallel ablaufen um Zeit zu sparen.
 
-\item \textbf{S2: Paket Verlust Messung für mehrere Tunnels} \\
-Das \tool{} soll in der Lage sein den Paket Verlust für alle Tunnels, die auf dem Rechner laufen zu bestimmen.
+\item \textbf{S2: Paket-Verlust Messung für mehrere Tunnels} \\
+Das \tool{} soll in der Lage sein den Paket-Verlust für alle Tunnels, die auf dem Rechner laufen, zu bestimmen.
   	
 \item \textbf{S3: Daemon Modus} \\
 Um 24/7 den Paket-Verlust messen zu können soll das Tool in der Lage sein als Unix-Daemon zu laufen.
@@ -45,10 +45,10 @@ Um 24/7 den Paket-Verlust messen zu können soll das Tool in der Lage sein als U
 \subsection{Kann-Kriterien}
 \begin{itemize}
 
-\item \textbf{K0: Konfiguration automatisch auslesen:} \\
-Die Applikation liest die benötigte Konfiguration aus vorhandenen Konfigurationsfile für die \acs{IPsec} Tunnels aus. So muss weniger für das \tool selbst konfiguriert werden.
+\item \textbf{K0: Statistiken erstellen} \\
+Es kann direkt aus dem \tool{} eine Statistik zum Paket-Verlust erstellt werden.
 
-\item \textbf{K1: Statistiken erstellen:} \\
-Es kann direkt aus dem \tool eine Statistik zum Paket Verlust erstellt werden.
+\item \textbf{K1: Solo \ac{MTU} Bestimmung} \\
+Für die \ac{MTU} Bestimmung ist nur eine \tool{} Installation notwendig. Der Router auf der Gegenseite muss nicht speziell konfiguriert sein.
 
 \end{itemize}
