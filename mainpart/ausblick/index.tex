@@ -1,20 +1,20 @@
 \chapter{Ausblick}
 \label{chap:Ausblick}
 
-Es gibt noch einiges was am \tool{} verbessert oder erweitert werden können. Die nachfolgenden Features konnten aufgrund der begrenzten Zeit nicht realisiert werden.
+Es gibt noch einiges was am \tool{} verbessert oder erweitert werden kann. Die nachfolgenden Features konnten aufgrund der begrenzten Zeit nicht realisiert werden.
 
 \begin{itemize}
 \item Automatisches Auslesen der vorhandenen Tunnels, so dass diese nicht in einer für das \tool{} spezifischen Konfiguration eingestellt werden müssen
 
 \item Getrennt konfigurierbare Interfaces in der Capture-Goroutinen für die Paket Verlust Analyse und die MTU Discovery.
 
-\item Verbesserte Retry-Logik oder mehrfach Ausführung wenn Paket Verlust bei der MTU Discovery auftritt. Wenn momentan Paket Verluste auftreten und diese das letzte Paket eines Batchs bei der MTU Discovery betreffen kann es sein dass eine zu tiefe MTU gemeldet wird. Eine Mehrfach-Ausführung oder bessere Retry-Logik könnte hier Abhilfe schaffen.
+\item Verbesserte Retry-Logik oder mehrfach Ausführung, wenn Paket Verlust bei der MTU Discovery auftritt. Falls Paket Verluste auftreten und diese das letzte Paket eines Batchs bei der MTU Discovery betreffen, kann es sein, dass eine zu tiefe MTU gemeldet wird. Eine Mehrfach-Ausführung oder bessere Retry-Logik könnte hier Abhilfe schaffen.
 
-\item Konfigurierbarer Paket-Typ bei der MTU Discovery und optionale Replies durch das \tool{} selbst. Momentan werden ICMP Requests verschickt die eine automatische Antwort des Gegenüber zur Folge haben. Wenn der Gegenüber aber so konfiguriert ist das keine ICMP Replies verschickt werden, wäre es nützlich wenn das Tool optional selbst solche Replies verschicken würde.
+\item Konfigurierbarer Paket-Typ bei der MTU Discovery und optionale Replies durch das \tool{} selbst. Momentan werden ICMP Requests verschickt die eine automatische Antwort des Gegenübers zur Folge haben. Wenn das Gegenüber aber so konfiguriert ist das keine ICMP Replies verschickt werden, wäre es nützlich, wenn das Tool optional selbst solche Replies verschicken würde.
 
 \item Konfigurierbare Langzeit Statistiken bei der Paket Verlust Messung.
 
-\item Refactoring und Unit Tests. Da wir die Programmiersprache Go zum ersten Mal verwendet haben und diese eigentlich erst im Verlauf des Projekts erlernen konnten wurden zum Teil Dinge programmiert die im Nachhinein besser anders gelöst worden wären. Gegen Ende des Projekts stand der Fokus auch vor Allem darauf die versprochene Funktionalität zu erfüllen und so haben die Unit Tests ein bisschen einen Backseat genommen. Es wäre wichtig das \tool{} konsequent zu refactoren und passende für alle Funktionen passende Unit Tests zu erstellen.
+\item Refactoring und Unit Tests. Da wir die Programmiersprache Go zum ersten Mal verwendet haben und diese eigentlich erst im Verlauf des Projekts erlernen konnten wurden zum Teil Dinge programmiert, die im Nachhinein besser hätten gelöst werden können. Gegen Ende des Projekts lag der Fokus darauf die versprochene Funktionalität zu erfüllen. So haben die Unit Tests ein bisschen einen Backseat genommen. Es wäre wichtig das \tool{} konsequent zu refactoren und für alle Funktionen passende Unit Tests zu erstellen.
 
 \todo{Jan: noch ein paar Punkte hinzufügen.}
 
