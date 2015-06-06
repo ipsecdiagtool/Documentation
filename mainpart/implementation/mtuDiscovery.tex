@@ -98,7 +98,7 @@ Falls die \code{mtu.sendBatch(..)} Funktion kein sinnvolles Ergebnis (0) zurück
 
 Wenn die \ac{MTU} erfolgreich gefunden wurde, dann wird diese von der \code{mtu.find(..)} Funktion über die \code{logging} Package an den konfigurierten Syslog Server gemeldet.
 
-Nun wartet nur noch die \code{mtu.FindAll()} Funktion darauf, dass die anderen \code{mtu.find(..)} Funktionen in ihren Goroutinen die \ac{MTU} Discovery beenden. Wenn dies geschehen ist, legt die \code{mtu.FindAll()} Funktion eine Nachricht in den quit-Channel der \code{mtu.distribute- \linebreak MtuOkPackets(..)} Goroutine um diese zu schliessen. Damit ist ein vollständiger \ac{MTU} Discovery Vorgang abgeschlossen. Wie genau das Versenden von Paketen funktioniert, wird nachfolgend noch genauer erklärt.
+Nun wartet nur noch die \code{mtu.FindAll()} Funktion darauf, dass die anderen \code{mtu.find(..)} Funktionen in ihren Goroutinen die \ac{MTU} Discovery beenden. Wenn dies geschehen ist, legt die \code{mtu.FindAll()} Funktion eine Nachricht in den quit-Channel der \code{mtu.distribute- \linebreak MtuOkPackets(..)} Goroutine um diese zu schliessen. Damit ist ein vollständiger \ac{MTU} Discovery Vorgang abgeschlossen. Wie  das Versenden von Paketen funktioniert, wird nachfolgend noch genauer erklärt.
 
 \subsection{Versenden von Paketen}
 Das Versenden von Paketen ist in der \code{mtu} Package in der \code{sendPacket(..)} Funktion implementiert. Die \code{sendPacket(..)} Funktion nimmt die folgenden Parameter entgegen:

@@ -5,13 +5,13 @@
 Um die bei der Analyse erwähnten Probleme von \acs{PMTUD} zu vermeiden wird die \acs{MTU} vom \tool{} innerhalb des \acs{VPN} Tunnels festgestellt.
 
 Dazu werden \acs{ICMP} Pakete vom Typ \enquote{ICMPv4TypeEchoRequest} und \enquote{ICMPv4TypeEcho-Reply} verwendet. Diese Pakete werden wie bei \acs{PMTUD} mit einem \enquote{Don't fragment} Flag versehen. Im Unterschied zu \acs{PMTUD} werden sie aber im \acs{VPN} Tunnels übermittelt und werden daher in \acs{ESP}s gekapselt. Ausserhalb des Tunnels sind die ICMP Pakete des \tool{}s so nicht unterscheidbar vom normalen Verkehr und können nicht blockiert werden.
-Der \enquote{Don't fragment} Flag jedoch wird bis in die \acs{ESP} Hülle weitergezogen, so dass auch das \acs{ESP}, welches das \acs{ICMP} Paket transportiert, nicht fragmentiert wird.
+Das \enquote{Don't fragment} Flag jedoch wird bis in die \acs{ESP} Hülle weitergezogen, so dass auch das \acs{ESP}, welches das \acs{ICMP} Paket transportiert, nicht fragmentiert wird.
 
 \begin{figure}[H]
     \begin{center}
         \includegraphics[trim=1 0 0 0,clip,width=\textwidth]{mainpart/implementation/img/ESP_DontFragment}
     \end{center}
-    \caption{In ESP gekapseltes ICMP Paket mit \enquote{Don't fragment} flag.}
+    \caption{In ESP gekapseltes ICMP Paket mit \enquote{Don't fragment} Flag.}
 \end{figure}
 
 Um den \acs{MTU} Discovery Vorgang zu starten wird jeweils ein \enquote{ICMPv4TypeEchoRequest} versendet. Erhält der Ziel Computer das Paket sendet er ein Ping Reply mit dem gleichen Paketinhalt zurück.

@@ -13,10 +13,10 @@ Zwei Desktop-Rechner der HSR, mit je 16GB Ram und Intel Xeon 3.4Ghz Quad-Core CP
 
 \subsection{Testdurchführung}
 Auf einem der beiden Rechnern läuft jPerf im Server-Modus sowie die getestete Software. Auf dem anderen Computer läuft jPerf im Client-Modus.
-Via. jPerf wird nun soviel Traffic erzeugt um die 1Gbit/s-Leitung möglichst stark auszulasten, d.h. durchschnittlich 900mbit/s. Die getestete Software zeichnet dabei die ganzen Pakete auf. Gemäss der \osag{} sind mit Lastspitzen von bis zu 300mbit/s zu rechnen.
+Durch jPerf wird nun soviel Traffic erzeugt um die 1 Gbit/s-Leitung möglichst stark auszulasten, d.h. durchschnittlich 900 Mbit/s. Die getestete Software zeichnet dabei die ganzen Pakete auf. Gemäss der \osag{} sind mit Lastspitzen von bis zu 300 Mbit/s zu rechnen.
 
 \subsection{Ergebnisse}
-Sowohl mit JNetPcap (Java) als auch mit goProbe (Golang) lassen sich mehr als 300mbit/s an Verkehr aufzeichnen. GoProbe ist mit den Durchschnittlich 16\% CPU Auslastung aber etwas performanter als JNetPcap. Die 31\% CPU Lastspitze beim Java Programm gibt es jeweils nur, wenn das Programm zum ersten Mal gestartet wird. Dies kommt daher, weil zuerst eine \acs{JVM} hochgefahren werden muss.
+Sowohl mit JNetPcap (Java) als auch mit goProbe (Golang) lassen sich mehr als 300 Mbit/s an Verkehr aufzeichnen. GoProbe ist mit den durchschnittlich 16\% CPU Auslastung aber etwas performanter als JNetPcap. Die 31\% CPU Lastspitze beim Java Programm gibt es jeweils nur, wenn das Programm zum ersten Mal gestartet wird. Dies kommt daher, weil zuerst eine \acs{JVM} hochgefahren werden muss.
 Beim Speicherverbrauch hat goProbe aber deutlich die Nase vorne. So wird tatsächlich nur ein Bruchteil des physischen Speichers (RES\footnotemark[2]) gegenüber Java verwendet.
 
 \begin{table}[h]

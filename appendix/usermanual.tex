@@ -14,7 +14,7 @@ Although the \entool{} has only been tested on Linux based systems you may be ab
 To install the \entool{} you need to run the following bash script. It will take care of setting up a temporary go-environment and getting the proper dependencies. You can also get the latest version of the build-script from the Github-Repository (\url{https://github.com/ipsecdiagtool/ipsecdiagtool/blob/master/build.sh}).
 
 \lstset{language=bash, breaklines=true}
-\begin{lstlisting}
+\begin{lstlisting}[caption=Install script]
 #!/usr/bin/env bash
 # Title:  build.sh                                       
 # URL:    https://github.com/ipsecDiagTool/ipsecDiagTool
@@ -63,6 +63,7 @@ go get github.com/ipsecdiagtool/ipsecdiagtool
 \subsection{Commands}
 The \entool{} can be run either as a local application or in daemon mode. The following commands can be used to control the \entool{} when it is launched as a local application. After this table you will find specific information and examples for typical use cases.
 
+\begin{table}[H]
 \begin{tabularx}{\textwidth}{l|l|>{\raggedright\arraybackslash}X} 
 \textbf{Command} & \textbf{Alternative} & \textbf{Explanation} \\
 \hline
@@ -75,6 +76,8 @@ debug &  & Show the path to the configuration file, the applicationID and other 
 about & version & Display general information about the \entool{}. \\
 help & & A list of commands and examples on how to use them.
 \end{tabularx}
+\caption{Command parameters for the \entool{}}
+\end{table}
 
 \subsection{Daemon Installation}
 To install the \entool{} as a daemon you need to launch it as superuser via \code{ipsecdiagtool install}. Then a list of potentially supported init-systems for your operating system is displayed. For the Linux operating system you are typically given the options in the listing below.
@@ -142,7 +145,7 @@ Syslog Info: MTU between 127.0.0.1 and 127.0.0.1 is 1500. Reported by AppID 9769
 To start a interactive packet loss detection you can run the tool with \code{ipsecdiagtool i pl}. It will now listen to the configured port and display all incomming packets. If you want to run a specific test you can also specify the location of a pcap file as an additional parameter. For example \code{ipsecdiagtool i pl /local/awesome.pcap}. Since pcap files can be easily manipulated they're ideal to run special test scenarios.
 
 \subsection{Configuration}
-The \entool{} stores its configuration as \code{../[execution directory]/etc/ipsecdiagtool.json}. If there is no \code{ipsecdiagtool.json} file at \code{../[execution directory]/etc} the tool will check if there is a configuration file in your current working directory. This behaviour was implemented to allow for a permanent config when launching the program from an \acs{IDE}. If there is no config in your current working directory a new config is created in \code{../[execution directory]/etc} containing default values.
+The \entool{} stores its configuration as \code{../[execution directory] \linebreak /etc/ipsecdiagtool.json}. If there is no \code{ipsecdiagtool.json} file at \code{../[execution directory]/etc} the tool will check if there is a configuration file in your current working directory. This behaviour was implemented to allow for a permanent config when launching the program from an \acs{IDE}. If there is no config in your current working directory a new config is created in \code{../[execution directory]/etc} containing default values.
 The config is valid json and can be edited through a normal editor such as \enquote{vim} or \enquote{nano}.
 
 \begin{lstlisting}[language=json, caption=Sample configuration]

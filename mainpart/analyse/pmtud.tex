@@ -14,7 +14,7 @@ Netzwerk Pakete beinhalten typischerweise mehrere Netzwerkprotokolle. Diese Prot
 
 Man ist aber nicht an genau diese Struktur gebunden. Man könnte zum Beispiel den Ethernet Layer durch einen anderen Layer austauschen und die restlichen Protokolle so belassen.
 
-Um das Zusammenspiel der unterschiedlichen Netzwerk Layern besser zu Veranschaulichen wurde das \ac{OSI}-Modell entwickelt. Das OSI Modell besteht aus 7 Layern, die jeweils unterschiedliche Aufgaben haben. Protokolle, die im gleichen \ac{OSI}-Layer mit klaren Schnittstellen definiert wurden, sind einfach austauschbar.
+Um das Zusammenspiel der unterschiedlichen Netzwerk Layer besser zu Veranschaulichen wurde das \ac{OSI}-Modell entwickelt. Das OSI Modell besteht aus 7 Layern, die jeweils unterschiedliche Aufgaben haben. Protokolle, die im gleichen \ac{OSI}-Layer mit klaren Schnittstellen definiert wurden, sind einfach austauschbar.
 
 \begin{figure}[H]
     \begin{center}
@@ -25,7 +25,7 @@ Um das Zusammenspiel der unterschiedlichen Netzwerk Layern besser zu Veranschaul
 
 Für die \ac{MTU} Discovery sind vor allem die Layer 1,2,3 des \ac{OSI}-Modells\footnotemark[1] wichtig. In Layer 1 \& 2 findet die eigentliche physische Übertragung statt. So ist beispielsweise das Ethernet Protokoll sowohl im physischen Layer als auch im Data-Link-Layer vorhanden.
 
-Die Protokolle der ersten beiden Layern haben im Vergleich zu den höheren Layern einen grossen Unterschied. Sie können nur eine begrenzt grosse Payload enthalten. So ist die maximale Payload bei Ethernet zum Beispiel 1500 Bytes. Ein Paket des Netzwerk-Layers (Layer 3) darf als maximal 1500 Bytes gross sein, wenn es über Ethernet übertragen werden soll. Diese maximale Payload nennt man \acl{MTU} \enquote{\acs{MTU}}.
+Die Protokolle der ersten beiden Layer haben im Vergleich zu den höheren Layern einen grossen Unterschied. Sie können nur eine begrenzt grosse Payload enthalten. So ist die maximale Payload bei Ethernet zum Beispiel 1500 Bytes. Ein Paket des Netzwerk-Layers (Layer 3) darf als maximal 1500 Bytes gross sein, wenn es über Ethernet übertragen werden soll. Diese maximale Payload nennt man \acl{MTU} \enquote{\acs{MTU}}.
 
 \footnotetext[1]{Bild: HSR Vorlesung CN1 - Steffen/Stettler, 29.07.2014, 1-Grundlagen.ppt}
 
