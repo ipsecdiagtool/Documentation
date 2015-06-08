@@ -1,0 +1,28 @@
+\section{Syslogprotokoll}
+\label{sec:Syslogprotokoll}
+
+Syslog ist eines der am häufigsten eingesetzten Protokolle zum Übermitteln von Log-Meldungen im Netzwerk. Durch den einfachen Aufbau und die breite Unterstützung ist es leicht einsetzbar.
+
+
+\subsection{ Aufbau}
+
+Eine Syslog-Meldung besitzt ein Severity-Field, womit der Schweregrad einer Nachricht festgelegt werden kann.
+
+\noindent Die Werte besitzen folgende Bedeutungen:
+
+\begin{table}[H]
+\begin{tabular}{|p{0.5in}|p{3.7in}|} \hline 
+Code & \textbf{Severity} \\ \hline 
+0 & \textbf{Emergency:} system is unusable \\ \hline 
+1 & \textbf{Alert:} action must be taken immediately \\ \hline 
+2 & \textbf{Critical:} critical conditions \\ \hline 
+3 & \textbf{Error:} error conditions \\ \hline 
+4 & \textbf{Warning:} warning conditions \\ \hline 
+5 & \textbf{Notice:} normal but significant condition \\ \hline 
+6 & \textbf{Informational:} informational messages \\ \hline 
+7 & \textbf{Debug:} debug-level messages \\ \hline 
+\end{tabular}
+\caption{Severity-Feld einer Syslogmeldung nach RFC 5424}
+\end{table}
+
+Zudem besteht eine Meldung noch aus einem Header, sowie der eigentlichen Nachricht.
