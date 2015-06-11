@@ -1,24 +1,16 @@
 \section{Paketverlust erkennen}
 \label{sec:Paketverlust erkennen}
 
-\subsection{Vorgehen bei Paketverlust}
-
-Falls ein Übertragungsmedium nicht korrekt funktioniert, ist es möglich, dass Datenpakete nicht am Ziel oder mit einer zu grossen Verspätung ankommen.
-Da jedes \esp{} Paket mit einer Sequenznummer versehen ist, können diese Paketverluste erkannt und gemeldet werden.
-
-Die \esp{} Pakete besitzen zum Schutz vor Replay-Angriffen eine Sequenznummer sowie einen bestimmten Gültigkeitsbereich (Windowsize).\\
-Die Pakete können zum Beispiel durch Loadbalancing \"{u}ber unterschiedliche Pfade verschickt werden. Dadurch kann die Reihenfolge der Pakete am Ziel nicht mehr gewährleistet werden. Die zu spät ankommenden Pakete müssen daher überprüft werden, ob die Sequenznummer aktuell noch gültig ist (innerhalb des Window).
-
-\todo{Jan: Caption bei Grafik hinzufügen}
-
-\includegraphics[width=1\textwidth]{start/img/Sequenznummern.png}
-
 \subsection{Datenstruktur für die \esp Verbindungen}
 Pro Verbindung werden separate Sequenznummern verwendet. Die verschiedenen Verbindungen werden durch eine Hashmap verwaltet. Als Key wird eine Struktur aus Source, Destination und \acs{SPI} verwendet. Als Value werden grundsätzlich zwei Listen für die Lost und MaybeLost Pakete benötigt. Zusätzlich wird noch ein Wert für den aktuellen Head gespeichert.
 
-\todo{Jan: Caption bei Grafik hinzufügen}
 
-\includegraphics[width=1\textwidth]{start/img/Datenstruktur.png}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[trim=1 0 0 0,clip,width=\textwidth]{start/img/Datenstruktur.png}
+    \end{center}
+    \caption{Datenstruktur zur Feststellung des Paketverlusts}
+\end{figure}
 
 \subsection{Erkennung des Paketverlusts}
 Die Paketverluste werden mit folgendem Algorithmus festgestellt.
