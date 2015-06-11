@@ -2,8 +2,15 @@
 \label{sec:Paketverlust erkennen}
 
 \subsection{Datenstruktur für die \esp Verbindungen}
-Pro Verbindung werden separate Sequenznummern verwendet. Die verschiedenen Verbindungen werden durch eine Hashmap verwaltet. Als Key wird eine Struktur aus Source, Destination und \acs{SPI} verwendet. Als Value werden grundsätzlich zwei Listen für die Lost und MaybeLost Pakete benötigt. Zusätzlich wird noch ein Wert für den aktuellen Head gespeichert.
+Für die Datenstruktur in GO musste ein Ersatz für bekannte Datenstrukturen wie Hashmap und Liste gefunden werden. Die Hashmap wurde in Go mit dem Typ "map" umgesetzt. Als Ersatz für eine Liste werden "Slices" eingesetzt. Dieser Typ ähnelt sehr einem Array, kann aber beliebig wachsen und schrumpfen und sind dennoch sehr Ressourcen schonend.\\
 
+Die Datenstruktur besteht grundsätzlich aus einer Hashmap zum speichern der Verlorenen Pakete für jede VPN-Verbindung.
+Eine VPN-Verbindung wird identifiziert mit den Werten für \acs{SPI} der Source- sowie der Destinationadresse.\\
+Als Value werden grundsätzlich zwei Listen für die Lost und MaybeLost Pakete benötigt.\\ 
+Wobei MaybeLost für die Sequenznummern der Pakete die als fehlend erkannt wurden aber noch innerhalb des ESP-Window liegen gedacht ist.\\
+Lost hingegen ist für Sequenznummern der Pakete die als Verloren erkannt wurden oder zu spät angekommen sind.\\
+Zusätzlich wird noch ein Wert für den aktuellen Head gespeichert.\\
+Durch diese Aufteilung, können Pakete beziehungsweise deren Sequenznummern sehr effektiv verwaltet werden.
 
 \begin{figure}[H]
     \begin{center}
@@ -13,23 +20,22 @@ Pro Verbindung werden separate Sequenznummern verwendet. Die verschiedenen Verbi
 \end{figure}
 
 \subsection{Erkennung des Paketverlusts}
-Die Paketverluste werden mit folgendem Algorithmus festgestellt.
-Vereinfachte Darstellung des Algorithmus in Pseudocode:
-\\
+Die Paketverluste werden mit folgendem Algorithmus festgestellt. 
+Vereinfachte Darstellung des Algorithmus in Pseudocode:\\
 \textbf{Neues Packet Verarbeiten}
 \begin{lstlisting}[language=go]
-if(neuesPacket > Head){
-	if(neuesPacket != Head + 1){
-		Packete von Head bis neuesPacket in 
-		MaybeLost speichern
+If(neuesPaket > Head){
+	If(neuesPaket != Head + 1){
+		Pakete von Head bis neuesPaket in MaybeLost speichern
 	}
-	Head = neuesPacket
+	Head = neuesPaket
 	CheckLost()
 }else{
-	if(Head-WindowSize < neuesPacket){
+	If(Head-WindowSize<neuesPaket){
 		Packet aus MaybeLost entfernen
-	}else{
-		Flag fuer zu spaet angekommen setzen	
+	}
+	else{
+		Flag setzen fuer zu spaet angekommen
 	}
 }
 \end{lstlisting}
@@ -38,9 +44,21 @@ if(neuesPacket > Head){
 \begin{lstlisting}[language=go]
 for(MaybeLost){
 	if(Head-WindowSize >= MaybeLostEintrag){
-		Packet in Lost Speichern
-		Packet aus MaybeLost entfernen
+		Paket in Lost Speichern
+		Paket aus MaybeLost entfernen
+}
+CheckLog()
+\end{lstlisting}
+
+\textbf{CheckLog}
+\begin{lstlisting}[language=go]
+for(LostPackets){
+	if(in Time Window){
+		counter++
 	}
+}
+if(counter>=AlertCounter){
+	Alert()
 }
 \end{lstlisting}
 
@@ -51,12 +69,14 @@ for(MaybeLost){
 
 \noindent Der Alert besitzt folgende Form:
 
-\begin{tabular}{|p{0.5in}|p{0.7in}|p{3.0in}|} \hline 
-Severity & Programm & Meldung \\ \hline 
-1 & IPsecDiagTool & Too much LostPackets in Connection: (SPI: \dots ,SRC:\dots ,DST\dots ) \\ \hline 
-\end{tabular}
-
-\todo{Tabelle überschneidet sich.}
+\begin{table}[H]
+\begin{tabularx}{\textwidth}{l|l|>{\raggedright\arraybackslash}X} 
+\textbf{Severity} & \textbf{Programm} & \textbf{Meldung}\\ 
+\hline
+1 & IPsecDiagTool & Too much LostPackets in Connection: (SPI: \dots ,SRC:\dots ,DST\dots
+\end{tabularx}
+\caption{Aufbau der Syslog-Nachricht}
+\end{table}
 
 \noindent So kann gleich anhand der Meldung erkannt werden, um welche Verbindung es sich handelt und die notwendigen Schritte für eine Korrektur vorgenommen werden.
 
@@ -76,13 +96,9 @@ Severity & Programm & Meldung \\ \hline
 
 \noindent Beispiel einer Datei
 
-\begin{tabular}{|p{0.9in}|p{1.7in}|p{0.8in}|} \hline 
-\multicolumn{2}{|p{1in}|}{SPI:12345 SRC: 192.168.0.1 DST: 192.168.0.2} &  \\ \hline 
-Sequencenumber & Timestamp & ReceivedLater \\ \hline 
-2 & Monday, 04-May-15 11:53:42 CEST & false \\ \hline 
-3 & Monday, 04-May-15 11:53:42 CEST & true \\ \hline 
-4 & Monday, 04-May-15 11:53:42 CEST & false \\ \hline 
-5 & Monday, 04-May-15 11:53:42 CEST & false \\ \hline 
-\end{tabular}
-
-\todo{Tabelle mit Caption versehen und Überschneiden beheben.}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[trim=1 0 0 0,clip,width=\textwidth]{start/img/Datei.png}
+    \end{center}
+    \caption{Beispiel einer generierten CSV Datei}
+\end{figure}
