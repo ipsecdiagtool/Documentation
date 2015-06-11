@@ -18,7 +18,7 @@ Durch diese Aufteilung, können Pakete beziehungsweise deren Sequenznummern sehr
     \end{center}
     \caption{Datenstruktur zur Feststellung des Paketverlusts}
 \end{figure}
-
+\clearpage
 \subsection{Erkennung des Paketverlusts}
 Die Paketverluste werden mit folgendem Algorithmus festgestellt. 
 Vereinfachte Darstellung des Algorithmus in Pseudocode:\\
@@ -39,6 +39,14 @@ If(neuesPaket > Head){
 	}
 }
 \end{lstlisting}
+Falls keine Sequenznummer verloren ging ist der Ablauf sehr kurz, da dies der häufigste fall ist.\\
+Zuerst wird überprüft, ob die Sequenznummer des neuen Pakets grösser ist als der aktuell gespeicherte Head. Falls die Sequenznummer genau um eins grösser ist als der aktuelle Head, bedeutet dies das keine Sequenznummer verloren gegangen ist und der Head wird aktualisiert.
+Nach dem aktualisieren wird überprüft ob fehlende Sequenznummern definitiv als verloren deklariert werden können.\\
+
+Der andere Fall ist, dass eine neue Sequenznummer zwar grösser als der aktuelle Head ist es jedoch eine Lücke zwischen den Werten gibt. Falls dies der Fall ist, werden alle Sequenznummern dieser Lücke in MaybeLost gespeichert.\\
+
+Falls das neue Paket eine kleinere Sequenznummer als der aktuelle Head aufweist, ist es ein Paket, dass verspätet eintrifft.
+In diesem Fall wird überprüft, ob sich die Sequenznummer noch innerhalb des gültigen Bereichs (ESP-Window) befindet. Falls dies zutrifft kann das Paket aus MaybeLost entfernt werden. Falls das Paket jedoch schon ausserhalb des Windows ist wird ein Flag für zu spät angekommen gesetzt.
 
 \textbf{CheckLost}
 \begin{lstlisting}[language=go]
@@ -49,6 +57,8 @@ for(MaybeLost){
 }
 CheckLog()
 \end{lstlisting}
+
+CheckLost wird bei jeder Änderung des Werts von Head ausgeführt. In diesem Fall kann es sein, dass Pakete von MaybeLost aus dem Window fallen und daher in Lost verschoben werden müssen.
 
 \textbf{CheckLog}
 \begin{lstlisting}[language=go]
@@ -61,6 +71,8 @@ if(counter>=AlertCounter){
 	Alert()
 }
 \end{lstlisting}
+
+CheckLog überprüft, ob die Kriterien für ein Alert gegeben sind und führt diesen gegebenenfalls aus. Um zu vermeiden, dass mehrere Nachrichten für die gleichen fehlenden Pakete versendet wird, wurde im realen Go Code eine Zeitbarriere eingebaut. Dadurch kann die gleiche Nachricht maximal alle 10 Sekunden versendet werden. Dadurch, dass die Verlorenen Packete in einem gewissen Zeitrahmen liegen müssen um gezählt zu werden, wird so eine Nachrichtenflut verhindert.
 
 
 \section{ Meldungsaufbau}
